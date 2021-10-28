@@ -1,0 +1,182 @@
+﻿@model IEnumerable<Thak_tshehWebAPI.Models.Activity>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>活動資料</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActivityClass)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActivityType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActivityVenue)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Software)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Area)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActivityStartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActivityEndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganizerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganizerPhone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganizerMail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Link)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LimitNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartAcceptDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndAcceptDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PostState)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FreeCost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicantNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicantFull)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Views)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CollectNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EvaluateStars)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatDate)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Id)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Image)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ActivityClass)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ActivityType)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ActivityVenue)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Software)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Area)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ActivityStartDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ActivityEndDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.OrganizerName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.OrganizerPhone)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.OrganizerMail)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Link)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Price)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.LimitNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.StartAcceptDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.EndAcceptDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PostState)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FreeCost)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ApplicantNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ApplicantFull)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Views)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CollectNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.EvaluateStars)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreatDate)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+    </td>
+</tr>
+}
+
+</table>

@@ -1,0 +1,39 @@
+﻿<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
+    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
+            a broad range of clients, including browsers and mobile devices. ASP.NET Web API
+            is an ideal platform for building RESTful applications on the .NET Framework.
+        </p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Get more libraries</h2>
+        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+    </div>
+</div>
+<form name='Newebpay' method='post' action='https://ccore.newebpay.com/MPG/mpg_gateway'>
+    <!-- 設定 hidden 可以隱藏不用給使用者看的資訊 -->
+    <!-- 藍新金流商店代號 -->
+    <input type='hidden' id='MerchantID' name='MerchantID' value='MS125900200'>
+    <!-- 交易資料透過 Key 及 IV 進行 AES 加密 -->
+    <input type='hidden' id='TradeInfo' name='TradeInfo' value='f749f877ab2c1c4f5d9b6027c35d8e45207115038e6fbd7fb6f7a0944f7441dd8fa609527c40045e446b2a3474cd368f2151592784bb4ac5e0d15964c1f87a34a9f49c1acced87952951c6f49e84456e4391c93512767303cca6b2d319a0126a2f0c8d09d6e881fbb2a18344dcd7a432f2956d15fbdce88bfb1af756be01552509db522eca1b50217ea3c43d05282465b8c65489378c2c623c40a164f65e4af42f7bd6f55653e1501dd3f41267ffd066759543c21ee003e09b3a878e88e575bd517c52ecf11a4d86d5a01dac0e5f5d2cd127936cc17285d592dba0224bfaefd912172d9374439377d484f28b70f335d1d492525edb3aa8d07835826d7a455b68fc3f904fb552508d6d65cfa1143232a0'>
+    <!-- 經過上述 AES 加密過的字串，透過商店 Key 及 IV 進行 SHA256 加密 -->
+    <input type='hidden' id='TradeSha' name='TradeSha' value='7EA9DAACF71F7F33F78246E7CB35DEF11552D01337E9C6D28CB756F61F2135A4'>
+    <!-- 串接程式版本 -->
+    <input type='hidden' id='Version' name='Version' value='1.5'>
+    <!-- 直接執行送出 -->
+    <input type='submit' value='Submit'>
+</form>
