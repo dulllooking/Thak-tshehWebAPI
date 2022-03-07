@@ -16,5 +16,6 @@ namespace Thak_tshehWebAPI.Security
 
         public string Image { get; set; }
 
+        public string image { get; set; }
     }
 }

@@ -72,7 +72,6 @@ namespace Thak_tshehWebAPI.Models
         // 東部 17~18
         台東縣,
         花蓮縣,
-        // 外島 19~21
         澎湖縣,
         金門縣,
         連江縣

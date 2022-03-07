@@ -31,6 +31,7 @@ namespace Thak_tshehWebAPI.Models
 
         //ForeignKey
         [Display(Name = "會員編號")]
+        [JsonProperty("userId")]
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]

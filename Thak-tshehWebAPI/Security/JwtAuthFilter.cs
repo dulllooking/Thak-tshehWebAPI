@@ -49,7 +49,7 @@ namespace Thak_tshehWebAPI.Security
                         var jwtObject = GetToken(request.Headers.Authorization.Parameter);
 
                         // 檢查有效期限是否過期，如JwtToken 過期，需導引重新登入
-                        if (IsTokenExpired(jwtObject["Exp"].ToString())) {
+                    if (IsTokenExpired(jwtObject["Exp"].ToString())) {
                             string messageJson = JsonConvert.SerializeObject(new { Status = false, Message = "請重新登入" }); // JwtToken 過期，需導引重新登入
                             var errorMessage = new HttpResponseMessage()
                             {
@@ -75,10 +75,10 @@ namespace Thak_tshehWebAPI.Security
                         };
                         throw new HttpResponseException(errorMessage);
                     }
+                    }
                 }
-            }
             base.OnActionExecuting(actionContext);
-        }
+            }
 
 
         /// <summary>
@@ -111,5 +111,6 @@ namespace Thak_tshehWebAPI.Security
         {
             return Convert.ToDateTime(dateTime) < DateTime.Now;
         }
+
     }
 }

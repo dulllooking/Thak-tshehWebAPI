@@ -8,50 +8,32 @@ using System.Web;
 
 namespace Thak_tshehWebAPI.Models
 {
-    /// <summary>
-    /// Token 記錄資料
-    /// </summary>
-    public class TokenLog
+    public class MailCode
     {
-        /// <summary>
-        /// 編號
-        /// </summary>
         [Key]
         [Display(Name = "編號")]
         [JsonProperty("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        /// <summary>
-        /// 會員編號
-        /// </summary>
+        //ForeignKey
         [Display(Name = "會員編號")]
         [JsonProperty("userId")]
         public int UserId { get; set; }
-
-        //ForeignKey
         [ForeignKey("UserId")]
-        [Display(Name = "會員")]
         public virtual User User { get; set; }
 
-        /// <summary>
-        /// RefreshToken
-        /// </summary>
         [MaxLength(50)]
-        [Display(Name = "RefreshToken")]
-        [JsonProperty("refreshToken")]
-        public string RefreshToken { get; set; }
+        [Display(Name = "驗證碼")]
+        [JsonProperty("checkCode")]
+        public string CheckCode { get; set; }
 
-        /// <summary>
-        /// 建立時間
-        /// </summary>
         [Display(Name = "建立時間")]
-        public DateTime? CreatDate { get; set; }
+        [JsonProperty("creatDate")]
+        public DateTime CreatDate { get; set; }
 
-        /// <summary>
-        /// 過期時間
-        /// </summary>
         [Display(Name = "過期時間")]
-        public DateTime? EndDate { get; set; }
+        [JsonProperty("endDate")]
+        public DateTime EndDate { get; set; }
     }
 }

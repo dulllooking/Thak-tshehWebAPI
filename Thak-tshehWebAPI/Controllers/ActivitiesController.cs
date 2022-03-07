@@ -17,10 +17,6 @@ using Thak_tshehWebAPI.Security;
 
 namespace Thak_tshehWebAPI.Controllers
 {
-    /// <summary>
-    /// 活動相關 API
-    /// </summary>
-    [EnableCors("*", "*", "*")] // 啟用跨網域存取
     public class ActivitiesController : ApiController
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
@@ -127,14 +123,14 @@ namespace Thak_tshehWebAPI.Controllers
                 .Where(x => (x.Name.Contains(keyWord1) || x.OrganizerName.Contains(keyWord1) || x.Summary.Contains(keyWord1) || x.ContentText.Contains(keyWord1)) || (x.Name.Contains(keyWord2) || x.OrganizerName.Contains(keyWord2) || x.Summary.Contains(keyWord2) || x.ContentText.Contains(keyWord2)))
                 .Where(x => area==0? (int)x.Area <= 6 : area==1? ((int)x.Area > 6 || (int)x.Area <= 11) : area==2? ((int)x.Area > 11 || (int)x.Area <= 16) : area==3? ((int)x.Area > 16 || (int)x.Area <= 18) : area==4 ? (int)x.Area > 18 : (int)x.Area >= 0)
                 .Select(x => new
-                {
+            {
                     x.Id,
-                    x.Name,
-                    x.Image,
-                    x.ActivityStartDate,
-                    x.ActivityEndDate,
-                    x.LimitNumber,
-                    x.Summary,
+                x.Name,
+                x.Image,
+                x.ActivityStartDate,
+                x.ActivityEndDate,
+                x.LimitNumber,
+                x.Summary,
                     x.OrganizerName,
                     ActivityType = x.ActivityType.ToString(),
                     ActivityClass = x.ActivityClass.ToString(),
@@ -147,7 +143,7 @@ namespace Thak_tshehWebAPI.Controllers
                     x.Price,
                     x.StartAcceptDate,
                     x.EndAcceptDate
-                });
+            });
 
             // 排序功能
             switch (sorting) {
@@ -162,7 +158,7 @@ namespace Thak_tshehWebAPI.Controllers
                     break;
                 default:
                     break;
-            }
+        }
 
             // 計算總頁數
             int totalPageNumber = (int)Math.Ceiling((float)info.Count() / split);

@@ -1,4 +1,9 @@
-﻿namespace Thak_tshehWebAPI.Security
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace Thak_tshehWebAPI.Security
 {
     /// <summary>
     /// 登入請求資料
@@ -40,5 +45,6 @@
         /// </summary>
         public int FollowingUserId { get; set; }
 
+        public string guid { get; set; }
     }
 }
