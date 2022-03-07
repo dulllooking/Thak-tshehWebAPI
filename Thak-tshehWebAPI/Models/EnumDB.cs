@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿#pragma warning disable CS1591 // 遺漏公用可見類型或成員的 XML 註解
 
 namespace Thak_tshehWebAPI.Models
 {
+    /// <summary>
+    /// 活動類別
+    /// </summary>
     public enum ActivityClass
     {
         商業理財,
@@ -16,6 +16,9 @@ namespace Thak_tshehWebAPI.Models
         電腦資訊
     }
 
+    /// <summary>
+    /// 活動型式
+    /// </summary>
     public enum ActivityType
     {
         線上讀書會,
@@ -23,18 +26,27 @@ namespace Thak_tshehWebAPI.Models
         活動工作坊
     }
 
+    /// <summary>
+    /// 活動場域
+    /// </summary>
     public enum ActivityVenue
     {
         線上視訊軟體,
         實體活動場地
     }
 
+    /// <summary>
+    /// 軟體名稱
+    /// </summary>
     public enum Software
     {
         GoogleMeet,
         Zoom
     }
 
+    /// <summary>
+    /// 縣市
+    /// </summary>
     public enum Area
     {
         // 北部 0~6
@@ -66,6 +78,9 @@ namespace Thak_tshehWebAPI.Models
         連江縣
     }
 
+    /// <summary>
+    /// 性別
+    /// </summary>
     public enum Sex
     {
         生理男,

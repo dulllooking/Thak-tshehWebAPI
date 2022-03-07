@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -13,21 +12,29 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using System.Web.Http.Description;
 using Thak_tshehWebAPI.Models;
 using Thak_tshehWebAPI.Security;
+using NSwag.Annotations;
 
 namespace Thak_tshehWebAPI.Controllers
 {
-    // 啟用跨網域存取
-    [EnableCors("*", "*", "*")]
+
+    /// <summary>
+    /// 使用者操作功能
+    /// </summary>
+    [OpenApiTag("Users", Description = "使用者操作功能")]
+    [EnableCors("*", "*", "*")]// 啟用跨網域存取
     public class UsersController : ApiController
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
         private const int expiryTime = 1;
 
-        // 1-5 聯絡我們功能 (JWT)
         // POST: api/users/contact-us
+        /// <summary>
+        /// 1-5 聯絡我們功能 (JWT)
+        /// </summary>
+        /// <param name="userData">登入資料</param>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpPost]
         [Route("api/users/contact-us")]
@@ -36,7 +43,7 @@ namespace Thak_tshehWebAPI.Controllers
             // 必填欄位資料檢查
             if (userData.Message == null) return Ok(new { Status = false, Message = "未填欄位" });
 
-            // 解密 JwtToken 取出資料回傳
+            // 取出請求內容，解密 JwtToken 取出資料
             var userToken = JwtAuthFilter.GetToken(Request.Headers.Authorization.Parameter);
             //單純刷新效期不新生成，新生成會進資料庫
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
@@ -380,6 +387,7 @@ namespace Thak_tshehWebAPI.Controllers
             var userQuery = db.User.FirstOrDefault(x => x.CheckMailCode == userData.Guid);
 
             if (userData.Guid == null) return Ok(new { Status = false, Message = "未填欄位" });
+            else if (userQuery.MailCodeCreatDate.AddMinutes(30) > DateTime.Now ) return Ok(new { Status = false, Message = "連結驗證碼超過30分鐘" });
             // 帳號檢查
             else if (userQuery == null) return Ok(new { Status = false, Message = "連結驗證碼不存在" });
             // 密碼格式不符
@@ -743,7 +751,7 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 6-1 報名活動-個資帶入 (JWT)
+        // 6-1 報名活動-個資帶入 (JWT) *(未阻擋已截止報名活動)
         // POST: api/users/attend-data
         [JwtAuthFilter]
         [HttpPost]
@@ -775,7 +783,7 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 6-2 報名活動-免費+發信 (JWT)
+        // 6-2 報名活動-免費+發信 (JWT) *(未阻擋已截止報名活動)
         // POST: api/users/activity/free/attend
         [JwtAuthFilter]
         [HttpPost]
@@ -872,7 +880,7 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 6-3 確認報名-付費活動-付款前 (JWT)
+        // 6-3 確認報名-付費活動-付款前 (JWT) *(未阻擋已截止報名活動)
         // POST: api/users/activity/charge/attend
         [JwtAuthFilter]
         [HttpPost]

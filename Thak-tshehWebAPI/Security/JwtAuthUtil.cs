@@ -1,17 +1,18 @@
 ﻿using Jose;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Web;
 using System.Web.Configuration;
 using Thak_tshehWebAPI.Models;
 
 namespace Thak_tshehWebAPI.Security
 {
+    /// <summary>
+    /// JwtToken 生成功能
+    /// </summary>
     public class JwtAuthUtil
     {
-        private readonly ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext(); // DB 連線
 
         /// <summary>
         /// 生成 JwtToken
@@ -20,10 +21,12 @@ namespace Thak_tshehWebAPI.Security
         /// <returns>JwtToken</returns>
         public string GenerateToken(int id)
         {
-            string secretKey = WebConfigurationManager.AppSettings["TokenKey"]; // 驗證用，要加密送出的 key
-            var user = db.User.Find(id);
+            // 自訂字串，驗證用，用來加密送出的 key (放在 Web.config 的 appSettings)
+            string secretKey = WebConfigurationManager.AppSettings["TokenKey"]; // 從 appSettings 取出
+            var user = db.User.Find(id); // 進 DB 取出想要夾帶的基本資料
             string[] tempNickName = user.Account.Split('@');
 
+            // payload 需透過 token 傳遞的資料 (可夾帶常用且不重要的資料)
             var payload = new Dictionary<string, object>
             {
                 { "Id", user.Id },
@@ -31,34 +34,32 @@ namespace Thak_tshehWebAPI.Security
                 { "NickName", String.IsNullOrEmpty(user.NickName) ? tempNickName[0] : user.NickName },
                 { "Image", String.IsNullOrEmpty(user.Image) ? "defaultProfile.jpg" : user.Image },
                 { "Exp", DateTime.Now.AddMinutes(30).ToString() } // JwtToken 時效設定 30 分
-            }; // payload 需透過 token 傳遞的資料
+            };
 
-            var token = JWT.Encode(payload, Encoding.UTF8.GetBytes(secretKey), JwsAlgorithm.HS512); //產生 JwtToken
+            // 產生 JwtToken
+            var token = JWT.Encode(payload, Encoding.UTF8.GetBytes(secretKey), JwsAlgorithm.HS512); // 產生 JwtToken
             return token;
         }
 
         /// <summary>
         /// 生成只刷新效期的 JwtToken
         /// </summary>
-        /// <param name="userId">JWT解密後的Id</param>
-        /// <param name="userAccount">JWT解密後的Account</param>
-        /// <param name="userNickName">JWT解密後的NickName</param>
-        /// <param name="userImage">JWT解密後的Image</param>
         /// <returns>JwtToken</returns>
         public string ExpRefreshToken(Dictionary<string, object> tokenData)
         {
-            //單純刷新效期不新生成，新生成會進資料庫
             string secretKey = WebConfigurationManager.AppSettings["TokenKey"];
+            // payload 從原本 token 傳遞的資料沿用，並刷新效期
             var payload = new Dictionary<string, object>
             {
                 { "Id", (int)tokenData["Id"] },
                 { "Account", tokenData["Account"].ToString() },
                 { "NickName", tokenData["NickName"].ToString() },
                 { "Image", tokenData["Image"].ToString() },
-                { "Exp", DateTime.Now.AddMinutes(30).ToString() } // JwtToken 時效設定 30 分
-            }; //payload 需透過 token 傳遞的資料
+                { "Exp", DateTime.Now.AddMinutes(30).ToString() } // JwtToken 時效刷新設定 30 分
+            };
 
-            var token = JWT.Encode(payload, Encoding.UTF8.GetBytes(secretKey), JwsAlgorithm.HS512); //產生 JwtToken
+            //產生刷新時效的 JwtToken
+            var token = JWT.Encode(payload, Encoding.UTF8.GetBytes(secretKey), JwsAlgorithm.HS512);
             return token;
         }
 
@@ -69,7 +70,7 @@ namespace Thak_tshehWebAPI.Security
         /// <returns>JwtToken</returns>
         public string RevokeToken()
         {
-            string secretKey = "RevokeToken";
+            string secretKey = "RevokeToken";  // 故意用不同的 key 生成
             var payload = new Dictionary<string, object>
             {
                 { "Id", 0 },
@@ -77,9 +78,10 @@ namespace Thak_tshehWebAPI.Security
                 { "NickName", "None" },
                 { "Image", "None" },
                 { "Exp", DateTime.Now.AddDays(-15).ToString() } // 使 JwtToken 過期 失效
-            }; // payload 需透過 JwtToken 傳遞的資料
+            };
 
-            var token = JWT.Encode(payload, Encoding.UTF8.GetBytes(secretKey), JwsAlgorithm.HS512); //產生 JwtToken
+            // 產生失效的 JwtToken
+            var token = JWT.Encode(payload, Encoding.UTF8.GetBytes(secretKey), JwsAlgorithm.HS512);
             return token;
         }
     }

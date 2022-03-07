@@ -17,8 +17,10 @@ using Thak_tshehWebAPI.Security;
 
 namespace Thak_tshehWebAPI.Controllers
 {
-    // 啟用跨網域存取
-    [EnableCors("*", "*", "*")]
+    /// <summary>
+    /// 活動相關 API
+    /// </summary>
+    [EnableCors("*", "*", "*")] // 啟用跨網域存取
     public class ActivitiesController : ApiController
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
@@ -312,6 +314,11 @@ namespace Thak_tshehWebAPI.Controllers
 
         // 5-1 活動+舉辦者資料
         // GET: api/activity/id/活動ID
+        /// <summary>
+        /// 5-1 活動+舉辦者資料
+        /// </summary>
+        /// <param name="id">活動ID</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("api/activity/id/{id}")]
         public IHttpActionResult GetActivityDataById(int id)
