@@ -59,7 +59,7 @@ namespace Thak_tshehWebAPI.Security
                                     Encoding.UTF8,
                                     "application/json")
                             };
-                            throw new HttpResponseException(errorMessage);
+                            throw new HttpResponseException(errorMessage); // Debug 模式會停在此行，點繼續執行即可
                         }
                     }
                     catch (Exception) {
@@ -73,7 +73,7 @@ namespace Thak_tshehWebAPI.Security
                                     Encoding.UTF8,
                                     "application/json")
                         };
-                        throw new HttpResponseException(errorMessage);
+                        throw new HttpResponseException(errorMessage); // Debug 模式會停在此行，點繼續執行即可
                     }
                     }
                 }

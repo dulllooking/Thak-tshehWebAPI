@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,7 +10,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using Thak_tshehWebAPI.Models;
 using Thak_tshehWebAPI.Security;
 using NSwag.Annotations;
@@ -19,6 +17,10 @@ using Thak_tshehWebAPI.Models.Vms;
 using Thak_tshehWebAPI.Models.Attributes;
 using System.IO;
 using System.Text;
+using System.Drawing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp;
 
 namespace Thak_tshehWebAPI.Controllers
 {
@@ -1803,7 +1805,7 @@ namespace Thak_tshehWebAPI.Controllers
                 var provider = new MultipartMemoryStreamProvider();
                 await Request.Content.ReadAsMultipartAsync(provider);
 
-                // 取得檔案副檔名
+                // 取得檔案副檔名，單檔用.FirstOrDefault()直接取出，多檔需用迴圈
                 string[] fileNameData = provider.Contents.FirstOrDefault().Headers.ContentDisposition.FileName.Trim('\"').Split('.');
                 string fileType = fileNameData[1];
 
@@ -1811,12 +1813,17 @@ namespace Thak_tshehWebAPI.Controllers
                 string[] userAccountData = userToken["Account"].ToString().Split('@');
                 string fileName = userAccountData[0] + "Profile" + DateTime.Now.ToString("yyyyMMddHHmmss") + "." + fileType;
 
-                // 儲存圖片
+                // 儲存圖片，單檔用.FirstOrDefault()直接取出，多檔需用迴圈
                 var fileBytes = await provider.Contents.FirstOrDefault().ReadAsByteArrayAsync();
                 var outputPath = Path.Combine(root, fileName);
                 using (var output = new FileStream(outputPath, FileMode.Create, FileAccess.Write)) {
                     await output.WriteAsync(fileBytes, 0, fileBytes.Length);
                 }
+
+                // 使用 SixLabors.ImageSharp 調整圖片尺寸
+                var image = SixLabors.ImageSharp.Image.Load<Rgba32>(outputPath);
+                image.Mutate(x => x.Resize(120, 120)); // 輸入(120, 0)會保持比例出現黑邊
+                image.Save(outputPath);
 
                 return Ok(new
                 {
