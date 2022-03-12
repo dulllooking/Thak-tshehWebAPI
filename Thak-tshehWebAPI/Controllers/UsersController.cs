@@ -1768,7 +1768,7 @@ namespace Thak_tshehWebAPI.Controllers
 
         // *7-18 上傳個人頭貼 (JWT)
         // Post: api/users/profile/upload
-        //[JwtAuthFilter]
+        [JwtAuthFilter]
         [HttpPost]
         [Route("api/users/profile/upload")]
         public async Task<IHttpActionResult> UploadProfile()
@@ -1779,7 +1779,7 @@ namespace Thak_tshehWebAPI.Controllers
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             string jwtToken = jwtAuthUtil.ExpRefreshToken(userToken);
 
-            // Check if the request contains multipart/form-data.
+            // 檢查請求是否包含 multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent()) {
                 string messageJson = JsonConvert.SerializeObject(new { Status = false, Message = "multipart/form-data error" });
                 var errorMessage = new HttpResponseMessage()
@@ -1792,16 +1792,31 @@ namespace Thak_tshehWebAPI.Controllers
                 throw new HttpResponseException(errorMessage);
             }
 
-            var root = HttpContext.Current.Server.MapPath("~/upload/profile");
-            var exists = Directory.Exists(root);
-            if (!exists) {
+            // 檢查資料夾是否存在，若無則建立
+            string root = HttpContext.Current.Server.MapPath("~/upload/profile");
+            if (!Directory.Exists(root)) {
                 Directory.CreateDirectory("~/upload/profile");
             }
 
-            var provider = new MultipartFormDataStreamProvider(root);
             try {
-                // Read the form data.
+                // 讀取 MIME 資料
+                var provider = new MultipartMemoryStreamProvider();
                 await Request.Content.ReadAsMultipartAsync(provider);
+
+                // 取得檔案副檔名
+                string[] fileNameData = provider.Contents.FirstOrDefault().Headers.ContentDisposition.FileName.Trim('\"').Split('.');
+                string fileType = fileNameData[1];
+
+                // 定義檔案名稱
+                string[] userAccountData = userToken["Account"].ToString().Split('@');
+                string fileName = userAccountData[0] + "Profile" + DateTime.Now.ToString("yyyyMMddHHmmss") + "." + fileType;
+
+                // 儲存圖片
+                var fileBytes = await provider.Contents.FirstOrDefault().ReadAsByteArrayAsync();
+                var outputPath = Path.Combine(root, fileName);
+                using (var output = new FileStream(outputPath, FileMode.Create, FileAccess.Write)) {
+                    await output.WriteAsync(fileBytes, 0, fileBytes.Length);
+                }
 
                 return Ok(new
                 {
@@ -1809,12 +1824,12 @@ namespace Thak_tshehWebAPI.Controllers
                     JwtToken = jwtToken,
                     Data = new
                     {
-                        FileName = provider.FileData.FirstOrDefault().Headers.ContentDisposition.FileName
+                        FileName = fileName
                     }
                 });
             }
             catch (Exception e) {
-                return Ok(new { Status = false, JwtToken = jwtToken, Message = e.ToString() });
+                return Ok(new { Status = false, JwtToken = jwtToken, Message = e.Message });
             }
         }
 
