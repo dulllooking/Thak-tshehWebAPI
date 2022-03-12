@@ -286,12 +286,14 @@
     <Compile Include="Models\ActivityLog.cs" />
     <Compile Include="Models\ActivityOpinion.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\Attributes\ApiResult.cs" />
     <Compile Include="Models\CompanyInfo.cs" />
     <Compile Include="Models\EnumDB.cs" />
     <Compile Include="Models\OrganizerLog.cs" />
     <Compile Include="Models\TokenLog.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserFollowers.cs" />
+    <Compile Include="Models\Vms\ContactUsVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\ActivityRequest.cs" />
     <Compile Include="Security\CryptoUtil.cs" />

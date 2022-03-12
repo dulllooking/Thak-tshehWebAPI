@@ -1,0 +1,1 @@
+#radioSex input[type=radio]{display:none}#radioSex input:checked+.btn{background:#111;color:#fff;cursor:default}#radioSex .btn{display:inline-block;margin:0 5px 10px 0;padding:5px 10px;background:#fcebb9;color:#111;cursor:pointer}
