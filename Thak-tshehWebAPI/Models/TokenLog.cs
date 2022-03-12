@@ -18,7 +18,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [Key]
         [Display(Name = "編號")]
-        [JsonProperty("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
@@ -26,7 +25,6 @@ namespace Thak_tshehWebAPI.Models
         /// 會員編號
         /// </summary>
         [Display(Name = "會員編號")]
-        [JsonProperty("userId")]
         public int UserId { get; set; }
 
         //ForeignKey
@@ -39,7 +37,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "RefreshToken")]
-        [JsonProperty("refreshToken")]
         public string RefreshToken { get; set; }
 
         /// <summary>

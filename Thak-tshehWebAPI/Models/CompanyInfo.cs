@@ -18,7 +18,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [Key]
         [Display(Name = "編號")]
-        [JsonProperty("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
@@ -27,7 +26,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(100)]
         [Display(Name = "公司名稱")]
-        [JsonProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
@@ -35,7 +33,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "公司電話")]
-        [JsonProperty("phone")]
         public string Phone { get; set; }
 
         /// <summary>
@@ -43,7 +40,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "公司信箱")]
-        [JsonProperty("email")]
         public string Email { get; set; }
 
         /// <summary>
@@ -51,7 +47,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(200)]
         [Display(Name = "Facebook連結")]
-        [JsonProperty("facebookLink")]
         public string FacebookLink { get; set; }
 
         /// <summary>
@@ -59,7 +54,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(200)]
         [Display(Name = "Instagram連結")]
-        [JsonProperty("instagramLink")]
         public string InstagramLink { get; set; }
 
         /// <summary>
@@ -67,21 +61,18 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(200)]
         [Display(Name = "Line連結")]
-        [JsonProperty("lineLink")]
         public string LineLink { get; set; }
 
         /// <summary>
         /// 關於我們
         /// </summary>
         [Display(Name = "關於我們")]
-        [JsonProperty("aboutUs")]
         public string AboutUs { get; set; }
 
         /// <summary>
         /// 常見問題
         /// </summary>
         [Display(Name = "常見問題")]
-        [JsonProperty("questions")]
         public string Questions { get; set; }
 
         /// <summary>

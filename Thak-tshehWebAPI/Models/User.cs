@@ -19,7 +19,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [Key]
         [Display(Name = "會員編號")]
-        [JsonProperty("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
@@ -29,7 +28,6 @@ namespace Thak_tshehWebAPI.Models
         [Required]
         [MaxLength(50)]
         [Display(Name = "信箱帳號")]
-        [JsonProperty("account")]
         public string Account { get; set; }
 
         /// <summary>
@@ -38,7 +36,6 @@ namespace Thak_tshehWebAPI.Models
         [Required]
         [MaxLength(100)]
         [Display(Name = "密碼")]
-        [JsonProperty("hashPassword")]
         public string HashPassword { get; set; }
 
         /// <summary>
@@ -46,7 +43,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "雜湊鹽")]
-        [JsonProperty("salt")]
         public string Salt { get; set; }
 
         /// <summary>
@@ -54,7 +50,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(200)]
         [Display(Name = "頭貼圖檔名稱")]
-        [JsonProperty("image")]
         public string Image { get; set; }
 
         /// <summary>
@@ -96,7 +91,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "國家")]
-        [JsonProperty("country")]
         public string Country { get; set; }
 
         /// <summary>
@@ -104,7 +98,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "城市")]
-        [JsonProperty("city")]
         public string City { get; set; }
 
         /// <summary>
@@ -112,7 +105,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "地區")]
-        [JsonProperty("area")]
         public string Area { get; set; }
 
         /// <summary>
@@ -120,7 +112,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(200)]
         [Display(Name = "Facebook連結")]
-        [JsonProperty("facebookLink")]
         public string FacebookLink { get; set; }
 
         /// <summary>
@@ -128,7 +119,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(200)]
         [Display(Name = "Instagram連結")]
-        [JsonProperty("instagramLink")]
         public string InstagramLink { get; set; }
 
         /// <summary>
@@ -136,7 +126,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(200)]
         [Display(Name = "關於我")]
-        [JsonProperty("aboutMe")]
         public string AboutMe { get; set; }
 
         /// <summary>
@@ -144,7 +133,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(200)]
         [Display(Name = "我的專長")]
-        [JsonProperty("mySkill")]
         public string MySkill { get; set; }
 
         /// <summary>
@@ -152,7 +140,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(200)]
         [Display(Name = "我的興趣")]
-        [JsonProperty("myInterest")]
         public string MyInterest { get; set; }
 
         /// <summary>
@@ -165,28 +152,24 @@ namespace Thak_tshehWebAPI.Models
         /// 顯示尚未評價的活動
         /// </summary>
         [Display(Name = "顯示尚未評價的活動")]
-        [JsonProperty("showNeedEvalActivity")]
         public bool ShowNeedEvalActivity { get; set; }
 
         /// <summary>
         /// 顯示收藏的活動
         /// </summary>
         [Display(Name = "顯示收藏的活動")]
-        [JsonProperty("showCollectActivity")]
         public bool ShowCollectActivity { get; set; }
 
         /// <summary>
         /// 顯示已完成的活動
         /// </summary>
         [Display(Name = "顯示已完成的活動")]
-        [JsonProperty("showFinishActivity")]
         public bool ShowFinishActivity { get; set; }
 
         /// <summary>
         /// 顯示取消的活動
         /// </summary>
         [Display(Name = "顯示取消的活動")]
-        [JsonProperty("showCancelActivity")]
         public bool ShowCancelActivity { get; set; }
 
         /// <summary>
@@ -205,14 +188,12 @@ namespace Thak_tshehWebAPI.Models
         /// 個人檔案瀏覽次數
         /// </summary>
         [Display(Name = "個人檔案瀏覽次數")]
-        [JsonProperty("views")]
         public int Views { get; set; }
 
         /// <summary>
         /// 帳號開通
         /// </summary>
         [Display(Name = "帳號開通")]
-        [JsonProperty("accountState")]
         public bool AccountState { get; set; }
 
         /// <summary>
@@ -226,7 +207,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "信箱驗證碼")]
-        [JsonProperty("checkMailCode")]
         public string CheckMailCode { get; set; }
 
         /// <summary>
@@ -240,7 +220,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "RefreshToken")]
-        [JsonProperty("refreshToken")]
         public string RefreshToken { get; set; }
 
         /// <summary>
@@ -251,24 +230,14 @@ namespace Thak_tshehWebAPI.Models
 
         public virtual ICollection<UserFollowers> UserFollowers { get; set; }
 
-        //阻止轉 Json 時的循環錯誤
-        [JsonIgnore]
         public virtual ICollection<ActivityLog> ActivityLog { get; set; }
 
-        //阻止轉 Json 時的循環錯誤
-        [JsonIgnore]
         public virtual ICollection<ActivityCollect> ActivityCollect { get; set; }
 
-        //阻止轉 Json 時的循環錯誤
-        [JsonIgnore]
         public virtual ICollection<ActivityOpinion> ActivityOpinion { get; set; }
 
         public virtual ICollection<OrganizerLog> OrganizerLog { get; set; }
 
         public virtual ICollection<TokenLog> TokenLog { get; set; }
-
-        //阻止轉 Json 時的循環錯誤
-        [JsonIgnore]
-        public virtual ICollection<MailCode> MailCode { get; set; }
     }
 }

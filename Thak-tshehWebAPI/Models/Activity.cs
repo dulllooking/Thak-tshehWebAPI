@@ -19,7 +19,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [Key]
         [Display(Name = "活動編號")]
-        [JsonProperty("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
@@ -28,7 +27,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "活動名稱")]
-        [JsonProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
@@ -78,7 +76,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "地址")]
-        [JsonProperty("address")]
         public string Address { get; set; }
 
         /// <summary>
@@ -86,21 +83,18 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "地址說明")]
-        [JsonProperty("addressRemark")]
         public string AddressRemark { get; set; }
 
         /// <summary>
         /// 活動開始時間
         /// </summary>
         [Display(Name = "活動開始時間")]
-        [JsonProperty("activityStartDate")]
         public DateTime ActivityStartDate { get; set; }
 
         /// <summary>
         /// 活動結束時間
         /// </summary>
         [Display(Name = "活動結束時間")]
-        [JsonProperty("activityEndDate")]
         public DateTime ActivityEndDate { get; set; }
 
         /// <summary>
@@ -108,7 +102,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(250)]
         [Display(Name = "活動簡介")]
-        [JsonProperty("summary")]
         public string Summary { get; set; }
 
         /// <summary>
@@ -116,7 +109,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(5000)]
         [Display(Name = "活動內容")]
-        [JsonProperty("contentText")]
         public string ContentText { get; set; }
 
         /// <summary>
@@ -124,7 +116,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(250)]
         [Display(Name = "活動注意事項")]
-        [JsonProperty("pleaseNote")]
         public string PleaseNote { get; set; }
 
         /// <summary>
@@ -132,7 +123,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "主辦單位名稱")]
-        [JsonProperty("organizerName")]
         public string OrganizerName { get; set; }
 
         /// <summary>
@@ -140,7 +130,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "主辦單位電話")]
-        [JsonProperty("organizerPhone")]
         public string OrganizerPhone { get; set; }
 
         /// <summary>
@@ -148,7 +137,6 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Display(Name = "主辦單位信箱")]
-        [JsonProperty("organizerMail")]
         public string OrganizerMail { get; set; }
 
         /// <summary>
@@ -162,63 +150,54 @@ namespace Thak_tshehWebAPI.Models
         /// 活動費用
         /// </summary>
         [Display(Name = "活動費用")]
-        [JsonProperty("price")]
         public int Price { get; set; }
 
         /// <summary>
         /// 活動人數限制
         /// </summary>
         [Display(Name = "活動人數限制")]
-        [JsonProperty("limitNumber")]
         public int LimitNumber { get; set; }
 
         /// <summary>
         /// 開始報名時間
         /// </summary>
         [Display(Name = "開始報名時間")]
-        [JsonProperty("startAcceptDate")]
         public DateTime StartAcceptDate { get; set; }
 
         /// <summary>
         /// 結束報名時間
         /// </summary>
         [Display(Name = "結束報名時間")]
-        [JsonProperty("endAcceptDate")]
         public DateTime EndAcceptDate { get; set; }
 
         /// <summary>
         /// 活動發布狀態
         /// </summary>
         [Display(Name = "活動發布狀態")]
-        [JsonProperty("postState")]
         public bool PostState { get; set; }
 
         /// <summary>
         /// 免費活動
         /// </summary>
         [Display(Name = "免費活動")]
-        [JsonProperty("freeCost")]
         public bool FreeCost { get; set; }
 
         /// <summary>
         /// 目前報名人數
         /// </summary>
         [Display(Name = "目前報名人數")]
-        [JsonProperty("applicantNum")]
         public int ApplicantNumber { get; set; }
 
         /// <summary>
         /// 報名額滿
         /// </summary>
         [Display(Name = "報名額滿")]
-        [JsonProperty("applicantNum")]
         public bool ApplicantFull { get; set; }
 
         /// <summary>
         /// 活動檔案瀏覽次數
         /// </summary>
         [Display(Name = "活動檔案瀏覽次數")]
-        [JsonProperty("views")]
         public int Views { get; set; }
 
         /// <summary>
@@ -246,16 +225,10 @@ namespace Thak_tshehWebAPI.Models
         [Display(Name = "建立時間")]
         public DateTime? CreatDate { get; set; }
 
-        //阻止轉 Json 時的循環錯誤
-        [JsonIgnore]
         public virtual ICollection<ActivityLog> ActivityLog { get; set; }
 
-        //阻止轉 Json 時的循環錯誤
-        [JsonIgnore]
         public virtual ICollection<ActivityCollect> ActivityCollect { get; set; }
 
-        //阻止轉 Json 時的循環錯誤
-        [JsonIgnore]
         public virtual ICollection<ActivityOpinion> ActivityOpinion { get; set; }
 
         public virtual ICollection<OrganizerLog> OrganizerLog { get; set; }

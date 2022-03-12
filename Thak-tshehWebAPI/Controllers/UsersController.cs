@@ -15,6 +15,10 @@ using System.Web.Http.Cors;
 using Thak_tshehWebAPI.Models;
 using Thak_tshehWebAPI.Security;
 using NSwag.Annotations;
+using Thak_tshehWebAPI.Models.Vms;
+using Thak_tshehWebAPI.Models.Attributes;
+using System.IO;
+using System.Text;
 
 namespace Thak_tshehWebAPI.Controllers
 {
@@ -23,7 +27,7 @@ namespace Thak_tshehWebAPI.Controllers
     /// 使用者操作功能
     /// </summary>
     [OpenApiTag("Users", Description = "使用者操作功能")]
-    [EnableCors("*", "*", "*")]// 啟用跨網域存取
+    //[EnableCors("*", "*", "*")] // 啟用前端JS跨網域存取
     public class UsersController : ApiController
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
@@ -33,15 +37,16 @@ namespace Thak_tshehWebAPI.Controllers
         /// <summary>
         /// 1-5 聯絡我們功能 (JWT)
         /// </summary>
-        /// <param name="userData">登入資料</param>
+        /// <param name="contactUsVm">留言資料</param>
         /// <returns></returns>
         [JwtAuthFilter]
         [HttpPost]
+        [SwaggerResponse(typeof(ApiResult))]
         [Route("api/users/contact-us")]
-        public IHttpActionResult SendContactUsMail([FromBody] LoginRequest userData)
+        public IHttpActionResult SendContactUsMail(ContactUsVm contactUsVm)
         {
             // 必填欄位資料檢查
-            if (userData.Message == null) return Ok(new { Status = false, Message = "未填欄位" });
+            if (contactUsVm.Message == null) return Ok(new { Status = false, Message = "未填欄位" });
 
             // 取出請求內容，解密 JwtToken 取出資料
             var userToken = JwtAuthFilter.GetToken(Request.Headers.Authorization.Parameter);
@@ -51,11 +56,11 @@ namespace Thak_tshehWebAPI.Controllers
 
             // 將留言寄信至客服信箱
             string serviceMail = WebConfigurationManager.AppSettings["ServiceMail"];
-            string userMessage = userData.Message;
+            string userMessage = contactUsVm.Message;
             Mail.SendMessageToUs("作伙來讀冊客服信箱", serviceMail, userToken["NickName"].ToString(), userToken["Account"].ToString(), userMessage);
 
             // 送出刷新 JwtToken
-            return Ok(new { Status = true, JwtToken = jwtToken });
+            return Ok(new ApiResult { Status = true, JwtToken = jwtToken });
         }
 
         // 1-8 Navbar 個人資料+頭貼 (JWT)
@@ -988,7 +993,7 @@ namespace Thak_tshehWebAPI.Controllers
                 new KeyValuePair<string, string>("LoginType", loginType)
             };
 
-            // 將List<KeyValuePair<string, string>> 轉換為 key1=Value1&key2=Value2&key3=Value3...
+            // 將 List<KeyValuePair<string, string>> 轉換為 key1=Value1&key2=Value2&key3=Value3...
             var tradeQueryPara = string.Join("&", tradeData.Select(x => $"{x.Key}={x.Value}"));
             // AES 加密
             tradeInfo = CryptoUtil.EncryptAESHex(tradeQueryPara, hashKey, hashIV);
@@ -1721,7 +1726,6 @@ namespace Thak_tshehWebAPI.Controllers
             // 單純刷新效期不新生成，新生成會進資料庫
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             string jwtToken = jwtAuthUtil.ExpRefreshToken(userToken);
-            int userId = (int)userToken["Id"];
 
             int followersNumber = db.UserFollowers.Count(y => y.FollowingUserId == id);
             var userData = db.User.Where(x => x.Id == id).Select(x => new
@@ -1763,40 +1767,54 @@ namespace Thak_tshehWebAPI.Controllers
         }
 
         // *7-18 上傳個人頭貼 (JWT)
-        // Put: api/users/profile/image/edit
-        [JwtAuthFilter]
-        [HttpPut]
-        [Route("api/users/profile/image/edit")]
-        public async Task<HttpResponseMessage> PostFormData()
+        // Post: api/users/profile/upload
+        //[JwtAuthFilter]
+        [HttpPost]
+        [Route("api/users/profile/upload")]
+        public async Task<IHttpActionResult> UploadProfile()
         {
             // 解密 JwtToken 取出資料回傳
             var userToken = JwtAuthFilter.GetToken(Request.Headers.Authorization.Parameter);
             // 單純刷新效期不新生成，新生成會進資料庫
             JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
             string jwtToken = jwtAuthUtil.ExpRefreshToken(userToken);
-            int userId = (int)userToken["Id"];
 
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent()) {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+                string messageJson = JsonConvert.SerializeObject(new { Status = false, Message = "multipart/form-data error" });
+                var errorMessage = new HttpResponseMessage()
+                {
+                    ReasonPhrase = "multipart/form-data error",
+                    Content = new StringContent(messageJson,
+                                Encoding.UTF8,
+                                "application/json")
+                };
+                throw new HttpResponseException(errorMessage);
             }
 
-            string root = HttpContext.Current.Server.MapPath("~/App_Data");
-            var provider = new MultipartFormDataStreamProvider(root);
+            var root = HttpContext.Current.Server.MapPath("~/upload/profile");
+            var exists = Directory.Exists(root);
+            if (!exists) {
+                Directory.CreateDirectory("~/upload/profile");
+            }
 
+            var provider = new MultipartFormDataStreamProvider(root);
             try {
                 // Read the form data.
                 await Request.Content.ReadAsMultipartAsync(provider);
 
-                // This illustrates how to get the file names.
-                foreach (MultipartFileData file in provider.FileData) {
-                    Trace.WriteLine(file.Headers.ContentDisposition.FileName);
-                    Trace.WriteLine("Server file path: " + file.LocalFileName);
-                }
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Ok(new
+                {
+                    Status = true,
+                    JwtToken = jwtToken,
+                    Data = new
+                    {
+                        FileName = provider.FileData.FirstOrDefault().Headers.ContentDisposition.FileName
+                    }
+                });
             }
-            catch (System.Exception e) {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            catch (Exception e) {
+                return Ok(new { Status = false, JwtToken = jwtToken, Message = e.ToString() });
             }
         }
 

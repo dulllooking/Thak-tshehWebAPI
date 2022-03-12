@@ -12,13 +12,11 @@ namespace Thak_tshehWebAPI.Models
     {
         [Key]
         [Display(Name = "編號")]
-        [JsonProperty("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         //ForeignKey
         [Display(Name = "會員編號")]
-        [JsonProperty("userId")]
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
@@ -27,7 +25,6 @@ namespace Thak_tshehWebAPI.Models
 
         //ForeignKey
         [Display(Name = "活動編號")]
-        [JsonProperty("activityId")]
         public int ActivityId { get; set; }
 
         [ForeignKey("ActivityId")]
