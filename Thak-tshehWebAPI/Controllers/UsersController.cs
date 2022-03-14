@@ -17,7 +17,6 @@ using Thak_tshehWebAPI.Models.Vms;
 using Thak_tshehWebAPI.Models.Attributes;
 using System.IO;
 using System.Text;
-using System.Drawing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp;
@@ -790,7 +789,7 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 6-2 報名活動-免費+發信 (JWT) *(未阻擋已截止報名活動)
+        // 6-2 報名活動-免費+發信 (JWT)
         // POST: api/users/activity/free/attend
         [JwtAuthFilter]
         [HttpPost]
@@ -809,6 +808,7 @@ namespace Thak_tshehWebAPI.Controllers
             var activityQuery = db.Activity.FirstOrDefault(x => x.Id == attendData.ActivityId);
             if (activityQuery.ApplicantFull) return Ok(new { Status = false, Message = "報名額滿" });
             else if (!(activityQuery.FreeCost)) return Ok(new { Status = false, Message = "非免費活動" });
+            else if (activityQuery.EndAcceptDate < DateTime.Now) return Ok(new { Status = false, Message = "截止報名" });
 
             // 解密 JwtToken 取出資料回傳
             var userToken = JwtAuthFilter.GetToken(Request.Headers.Authorization.Parameter);
@@ -887,12 +887,12 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 6-3 確認報名-付費活動-付款前 (JWT) *(未阻擋已截止報名活動)
+        // 6-3 確認報名-付費活動-付款前 (JWT)
         // POST: api/users/activity/charge/attend
         [JwtAuthFilter]
         [HttpPost]
         [Route("api/users/activity/charge/attend")]
-        public IHttpActionResult AttendChargeActivity([FromBody] ActivityRequest attendData)
+        public IHttpActionResult AttendChargeActivity(ActivityRequest attendData)
         {
             // 必填欄位資料檢查
             if (!ModelState.IsValid) return Ok(new { Status = false, Message = "未填欄位" });
@@ -910,6 +910,7 @@ namespace Thak_tshehWebAPI.Controllers
             var activityQuery = db.Activity.FirstOrDefault(x => x.Id == attendData.ActivityId);
             if (activityQuery.ApplicantFull) return Ok(new { Status = false, Message = "報名額滿" });
             else if (activityQuery.FreeCost) return Ok(new { Status = false, Message = "是免費活動" });
+            else if (activityQuery.EndAcceptDate < DateTime.Now) return Ok(new { Status = false, Message = "截止報名" });
 
             // 解密 JwtToken 取出資料回傳
             var userToken = JwtAuthFilter.GetToken(Request.Headers.Authorization.Parameter);
@@ -967,19 +968,19 @@ namespace Thak_tshehWebAPI.Controllers
             string tradeSha = "";
             string version = WebConfigurationManager.AppSettings["Version"];
 
-            // tradeInfo內容
-            string respondType = "JSON";
+            // tradeInfo 內容
+            string respondType = "JSON"; // 回傳格式
             string timeStamp = ((int)(dateTimeNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds).ToString();
             string merchantOrderNo = timeStamp +"_"+ orderQuery.Id.ToString(); // 底線後方為訂單ID，解密比對用
-            string amt = activityQuery.Price.ToString();
-            string itemDesc = activityQuery.ActivityType.ToString();
+            string amt = activityQuery.Price.ToString(); // 訂單金額
+            string itemDesc = activityQuery.ActivityType.ToString(); // 商品資訊
             string tradeLimit = "600"; // 交易限制秒數
-            string notifyURL = @"https://" + Request.RequestUri.Host + WebConfigurationManager.AppSettings["NotifyURL"];
-            string returnURL = WebConfigurationManager.AppSettings["ReturnURL"] + activityQuery.Id;
-            string email = userToken["Account"].ToString();
-            string loginType = "0";
+            string notifyURL = @"https://" + Request.RequestUri.Host + WebConfigurationManager.AppSettings["NotifyURL"]; //後端 API 接收藍新付款結果
+            string returnURL = WebConfigurationManager.AppSettings["ReturnURL"] + activityQuery.Id;  // 前端可拿來取得活動內容
+            string email = userToken["Account"].ToString(); // 通知付款完成用
+            string loginType = "0"; // 0不須登入藍新金流會員
 
-            // 將model 轉換為List<KeyValuePair<string, string>>
+            // 將 model 轉換為List<KeyValuePair<string, string>>
             List<KeyValuePair<string, string>> tradeData = new List<KeyValuePair<string, string>>() {
                 new KeyValuePair<string, string>("MerchantID", merchantID),
                 new KeyValuePair<string, string>("RespondType", respondType),
@@ -1002,7 +1003,6 @@ namespace Thak_tshehWebAPI.Controllers
             // SHA256 加密
             tradeSha = CryptoUtil.EncryptSHA256($"HashKey={hashKey}&{tradeInfo}&HashIV={hashIV}");
 
-
             // 送出金流串接用資料給前端送出用
             return Ok(new
             {
@@ -1022,11 +1022,10 @@ namespace Thak_tshehWebAPI.Controllers
         // POST: api/users/activity/payment/result
         [HttpPost]
         [Route("api/users/activity/payment/result")]
-        public HttpResponseMessage GetPaymentData([FromBody] NewebPayReturn data)
+        public HttpResponseMessage GetPaymentData(NewebPayReturn data)
         {
             // 付款失敗
             var response = Request.CreateResponse(HttpStatusCode.OK);
-            response.StatusCode = HttpStatusCode.OK;
             if (!data.Status.Equals("SUCCESS")) return response;
 
             // 加密用金鑰
@@ -1806,12 +1805,12 @@ namespace Thak_tshehWebAPI.Controllers
                 await Request.Content.ReadAsMultipartAsync(provider);
 
                 // 取得檔案副檔名，單檔用.FirstOrDefault()直接取出，多檔需用迴圈
-                string[] fileNameData = provider.Contents.FirstOrDefault().Headers.ContentDisposition.FileName.Trim('\"').Split('.');
-                string fileType = fileNameData[1];
+                string fileNameData = provider.Contents.FirstOrDefault().Headers.ContentDisposition.FileName.Trim('\"');
+                string fileType = fileNameData.Remove(0, fileNameData.LastIndexOf('.')); // .jpg
 
                 // 定義檔案名稱
                 string[] userAccountData = userToken["Account"].ToString().Split('@');
-                string fileName = userAccountData[0] + "Profile" + DateTime.Now.ToString("yyyyMMddHHmmss") + "." + fileType;
+                string fileName = userAccountData[0] + "Profile" + DateTime.Now.ToString("yyyyMMddHHmmss") + fileType;
 
                 // 儲存圖片，單檔用.FirstOrDefault()直接取出，多檔需用迴圈
                 var fileBytes = await provider.Contents.FirstOrDefault().ReadAsByteArrayAsync();
@@ -1820,7 +1819,7 @@ namespace Thak_tshehWebAPI.Controllers
                     await output.WriteAsync(fileBytes, 0, fileBytes.Length);
                 }
 
-                // 使用 SixLabors.ImageSharp 調整圖片尺寸
+                // 使用 SixLabors.ImageSharp 調整圖片尺寸 (正方形大頭貼)
                 var image = SixLabors.ImageSharp.Image.Load<Rgba32>(outputPath);
                 image.Mutate(x => x.Resize(120, 120)); // 輸入(120, 0)會保持比例出現黑邊
                 image.Save(outputPath);
@@ -1836,7 +1835,7 @@ namespace Thak_tshehWebAPI.Controllers
                 });
             }
             catch (Exception e) {
-                return Ok(new { Status = false, JwtToken = jwtToken, Message = e.Message });
+                return Ok(new { Status = false, Message = e.Message });
             }
         }
 

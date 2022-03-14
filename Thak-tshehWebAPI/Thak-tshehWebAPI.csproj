@@ -325,7 +325,6 @@
     <Compile Include="Security\NewebPayReturn.cs" />
     <Compile Include="Security\Payload.cs" />
     <Compile Include="Security\PaymentResult.cs" />
-    <Compile Include="Security\StringExtension.cs" />
     <Compile Include="Security\TextMediaTypeFormatter.cs" />
     <Compile Include="Security\UserTokenData.cs" />
     <Compile Include="Startup.cs" />

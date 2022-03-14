@@ -1,21 +1,16 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 
 namespace Thak_tshehWebAPI.Security
 {
     /// <summary>
-    /// 智付通加解密Util
+    /// 藍新加解密 Util
     /// </summary>
     public class CryptoUtil
     {
         /// <summary>
-        /// 字串加密AES
+        /// 字串加密 AES
         /// </summary>
         /// <param name="source">加密前字串</param>
         /// <param name="cryptoKey">加密金鑰</param>
@@ -39,7 +34,7 @@ namespace Thak_tshehWebAPI.Security
         }
 
         /// <summary>
-        /// 字串解密AES
+        /// 字串解密 AES
         /// </summary>
         /// <param name="source">解密前字串</param>
         /// <param name="cryptoKey">解密金鑰</param>
@@ -52,8 +47,8 @@ namespace Thak_tshehWebAPI.Security
 
             using (var aes = Aes.Create()) {
                 aes.Mode = CipherMode.CBC;
-                // 智付通無法直接用PaddingMode.PKCS7，會跳"填補無效，而且無法移除。"
-                // 所以改為PaddingMode.None並搭配RemovePKCS7Padding
+                // 無法直接用 PaddingMode.PKCS7，會跳"填補無效，而且無法移除。"
+                // 所以改為 PaddingMode.None 並搭配 RemovePKCS7Padding
                 aes.Padding = PaddingMode.None;
                 aes.Key = dataKey;
                 aes.IV = dataIV;
@@ -99,7 +94,7 @@ namespace Thak_tshehWebAPI.Security
 
             if (!string.IsNullOrEmpty(source)) {
                 // 將 16 進制字串 轉為 byte[] 後
-                byte[] sourceBytes = source.ToByteArray(); // StringExtension
+                byte[] sourceBytes = GetByteArray(source);
 
                 if (sourceBytes != null) {
                     // 使用金鑰解密後，轉回 加密前 value
@@ -110,9 +105,8 @@ namespace Thak_tshehWebAPI.Security
             return result;
         }
 
-
         /// <summary>
-        /// 字串加密SHA256
+        /// 字串加密 SHA256
         /// </summary>
         /// <param name="source">加密前字串</param>
         /// <returns>加密後字串</returns>
@@ -127,6 +121,28 @@ namespace Thak_tshehWebAPI.Security
                     result = BitConverter.ToString(hash)?.Replace("-", string.Empty)?.ToUpper();
                 }
 
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 將 16 進位字串轉換為 byteArray
+        /// </summary>
+        /// <param name="source">欲轉換之字串</param>
+        /// <returns></returns>
+        public static byte[] GetByteArray(string source)
+        {
+            byte[] result = null;
+
+            if (!string.IsNullOrWhiteSpace(source)) {
+                var outputLength = source.Length / 2;
+                var output = new byte[outputLength];
+
+                for (var i = 0; i < outputLength; i++) {
+                    output[i] = Convert.ToByte(source.Substring(i * 2, 2), 16);
+                }
+                result = output;
             }
 
             return result;

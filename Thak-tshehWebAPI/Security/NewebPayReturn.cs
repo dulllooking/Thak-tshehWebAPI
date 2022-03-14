@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Thak_tshehWebAPI.Security
+﻿namespace Thak_tshehWebAPI.Security
 {
     public class NewebPayReturn
     {

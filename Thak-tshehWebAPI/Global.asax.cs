@@ -26,7 +26,6 @@ namespace Thak_tshehWebAPI
             // Add a reference here to the new MediaTypeFormatter that adds text/plain support
             //GlobalConfiguration.Configuration.Formatters.Insert(0, new TextMediaTypeFormatter());
 
-
             //全部過濾的方式，加了需要在JwtAuthFilter內排除不使用JWT的api，不然沒使用的都會失效
             //GlobalConfiguration.Configuration.Filters.Add(new JwtAuthFilter());
         }
