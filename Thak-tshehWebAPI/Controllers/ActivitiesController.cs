@@ -208,7 +208,6 @@ namespace Thak_tshehWebAPI.Controllers
             // 計算總頁數
             int totalPageNumber = (int)Math.Ceiling((float)info.Count() / split);
 
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,
@@ -252,7 +251,6 @@ namespace Thak_tshehWebAPI.Controllers
             // 計算總頁數
             int totalPageNumber = (int)Math.Ceiling((float)info.Count() / split);
 
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,
@@ -296,7 +294,6 @@ namespace Thak_tshehWebAPI.Controllers
             // 計算總頁數
             int totalPageNumber = (int)Math.Ceiling((float)info.Count() / split);
 
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,
@@ -376,7 +373,6 @@ namespace Thak_tshehWebAPI.Controllers
             // 計算總頁數
             int totalPageNumber = (int)Math.Ceiling((float)opinionList.Count() / split);
 
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,

@@ -757,7 +757,7 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 6-1 報名活動-個資帶入 (JWT) *(未阻擋已截止報名活動)
+        // 6-1 報名活動-個資帶入 (JWT)
         // POST: api/users/attend-data
         [JwtAuthFilter]
         [HttpPost]
@@ -976,7 +976,7 @@ namespace Thak_tshehWebAPI.Controllers
             string itemDesc = activityQuery.ActivityType.ToString(); // 商品資訊
             string tradeLimit = "600"; // 交易限制秒數
             string notifyURL = @"https://" + Request.RequestUri.Host + WebConfigurationManager.AppSettings["NotifyURL"]; //後端 API 接收藍新付款結果
-            string returnURL = WebConfigurationManager.AppSettings["ReturnURL"] + activityQuery.Id;  // 前端可拿來取得活動內容
+            string returnURL = WebConfigurationManager.AppSettings["ReturnURL"] + activityQuery.Id; // 前端可用 Status: SUCCESS 來判斷付款成功，網址夾帶可拿來取得活動內容
             string email = userToken["Account"].ToString(); // 通知付款完成用
             string loginType = "0"; // 0不須登入藍新金流會員
 
@@ -1000,7 +1000,7 @@ namespace Thak_tshehWebAPI.Controllers
             var tradeQueryPara = string.Join("&", tradeData.Select(x => $"{x.Key}={x.Value}"));
             // AES 加密
             tradeInfo = CryptoUtil.EncryptAESHex(tradeQueryPara, hashKey, hashIV);
-            // SHA256 加密
+            // SHA256 加密 (格式參考文件)
             tradeSha = CryptoUtil.EncryptSHA256($"HashKey={hashKey}&{tradeInfo}&HashIV={hashIV}");
 
             // 送出金流串接用資料給前端送出用
@@ -1218,7 +1218,6 @@ namespace Thak_tshehWebAPI.Controllers
             int totalPageNumber = (int)Math.Ceiling((float)userJoinData.Count() / split);
 
             // .Skip() 前一定要接 .OrderBy()
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,
@@ -1259,7 +1258,6 @@ namespace Thak_tshehWebAPI.Controllers
             int totalPageNumber = (int)Math.Ceiling((float)userJoinData.Count() / split);
 
             // .Skip() 前一定要接 .OrderBy()
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,
@@ -1302,7 +1300,6 @@ namespace Thak_tshehWebAPI.Controllers
             // 計算總頁數
             int totalPageNumber = (int)Math.Ceiling((float)attendInfo.Count() / split);
 
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,
@@ -1345,7 +1342,6 @@ namespace Thak_tshehWebAPI.Controllers
             // 計算總頁數
             int totalPageNumber = (int)Math.Ceiling((float)attendInfo.Count() / split);
 
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,
@@ -1388,7 +1384,6 @@ namespace Thak_tshehWebAPI.Controllers
             // 計算總頁數
             int totalPageNumber = (int)Math.Ceiling((float)attendInfo.Count() / split);
 
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,
@@ -1432,7 +1427,6 @@ namespace Thak_tshehWebAPI.Controllers
             // 計算總頁數
             int totalPageNumber = (int)Math.Ceiling((float)attendInfo.Count() / split);
 
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,
@@ -1474,7 +1468,6 @@ namespace Thak_tshehWebAPI.Controllers
             // 計算總頁數
             int totalPageNumber = (int)Math.Ceiling((float)attendInfo.Count() / split);
 
-            // 刷新 JwtToken 並送出活動資料
             return Ok(new
             {
                 Status = true,
