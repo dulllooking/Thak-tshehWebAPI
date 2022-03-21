@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 
-
 namespace Thak_tshehWebAPI
 {
     public static class WebApiConfig
@@ -13,7 +12,7 @@ namespace Thak_tshehWebAPI
         public static void Register(HttpConfiguration config)
         {
             // 啟用跨網域存取
-            config.EnableCors();
+            //config.EnableCors();
 
             // Web API 路由
             config.MapHttpAttributeRoutes();

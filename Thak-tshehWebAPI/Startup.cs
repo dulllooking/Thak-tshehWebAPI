@@ -1,9 +1,11 @@
 ﻿using Microsoft.Owin;
+using Microsoft.Owin.Security.OAuth;
 using NSwag;
 using NSwag.AspNet.Owin;
 using NSwag.Generation.Processors.Security;
 using Owin;
 using System.Web.Http;
+using Thak_tshehWebAPI.Security;
 
 [assembly: OwinStartup(typeof(Thak_tshehWebAPI.Startup))]
 
@@ -20,7 +22,9 @@ namespace Thak_tshehWebAPI
         /// <param name="app"></param>
         public void Configuration(IAppBuilder app)
         {
-            // 如需如何設定應用程式的詳細資訊，請瀏覽 https://go.microsoft.com/fwlink/?LinkID=316888
+            // 啟用跨域及驗證
+            ConfigureAuth(app);
+
             var config = new HttpConfiguration();
             app.UseSwaggerUi3(typeof(Startup).Assembly, settings =>
             {
@@ -47,6 +51,18 @@ namespace Thak_tshehWebAPI
             app.UseWebApi(config);
             config.MapHttpAttributeRoutes();
             config.EnsureInitialized();
+        }
+
+        private void ConfigureAuth(IAppBuilder app)
+        {
+            // Configure the application for OAuth based flow
+            var oAuthOptions = new OAuthAuthorizationServerOptions
+            {
+                Provider = new AuthorizationServerProvider()
+            };
+
+            // Enable the application to use bearer tokens to authenticate users
+            app.UseOAuthAuthorizationServer(oAuthOptions);
         }
     }
 }

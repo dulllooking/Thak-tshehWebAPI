@@ -225,12 +225,16 @@ namespace Thak_tshehWebAPI.Models
         [Display(Name = "建立時間")]
         public DateTime? CreatDate { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<ActivityLog> ActivityLog { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<ActivityCollect> ActivityCollect { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<ActivityOpinion> ActivityOpinion { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<OrganizerLog> OrganizerLog { get; set; }
     }
 }

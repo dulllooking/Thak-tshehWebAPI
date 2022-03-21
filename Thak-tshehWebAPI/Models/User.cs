@@ -228,16 +228,22 @@ namespace Thak_tshehWebAPI.Models
         [Display(Name = "RefreshToken建立時間")]
         public DateTime? RefreshTokenCreatDate { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<UserFollowers> UserFollowers { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<ActivityLog> ActivityLog { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<ActivityCollect> ActivityCollect { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<ActivityOpinion> ActivityOpinion { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<OrganizerLog> OrganizerLog { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<TokenLog> TokenLog { get; set; }
     }
 }

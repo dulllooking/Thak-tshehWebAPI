@@ -28,7 +28,7 @@ namespace Thak_tshehWebAPI.Controllers
     /// 使用者操作功能
     /// </summary>
     [OpenApiTag("Users", Description = "使用者操作功能")]
-    //[EnableCors("*", "*", "*")] // 啟用前端JS跨網域存取
+    //[EnableCors("*", "*", "*")] // 官方跨域設定加入 Owin Swagger UI 生成 Startup.cs 導致失效
     public class UsersController : ApiController
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
@@ -1022,6 +1022,7 @@ namespace Thak_tshehWebAPI.Controllers
         // POST: api/users/activity/payment/result
         [HttpPost]
         [Route("api/users/activity/payment/result")]
+        //[EnableCors("https://ccore.newebpay.com", "*", "*")] // 啟用跨網域存取
         public HttpResponseMessage GetPaymentData(NewebPayReturn data)
         {
             // 付款失敗

@@ -9,15 +9,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Thak_tshehWebAPI.Models;
 using Thak_tshehWebAPI.Security;
 
 namespace Thak_tshehWebAPI.Controllers
 {
-    // 啟用跨網域存取
-    [EnableCors("*", "*", "*")]
     public class CompanyInfoesController : ApiController
     {
         // 連線資料庫

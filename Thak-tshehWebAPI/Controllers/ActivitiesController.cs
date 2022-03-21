@@ -10,13 +10,13 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Thak_tshehWebAPI.Models;
 using Thak_tshehWebAPI.Security;
 
 namespace Thak_tshehWebAPI.Controllers
 {
+    //[EnableCors("*", "*", "*")] // 官方跨域設定加入 Owin Swagger UI 生成 Startup.cs 導致失效
     public class ActivitiesController : ApiController
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
