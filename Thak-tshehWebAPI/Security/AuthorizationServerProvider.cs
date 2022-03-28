@@ -7,16 +7,22 @@ using System.Threading.Tasks;
 
 namespace Thak_tshehWebAPI.Security
 {
+    /// <summary>
+    /// OAuth 配置並繼承 OAuthAuthorizationServerProvider
+    /// </summary>
     public class AuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
         /// <summary>
-        /// match endpoint is called before Validate Client Authentication. we need to allow the clients based on domain to enable requests the header
+        /// 在驗證客戶端身分前調用，並依客戶端請求來源配置 CORS 允許類型設定
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
         public override Task MatchEndpoint(OAuthMatchEndpointContext context)
         {
+            // 依請求來源配置 CORS 允許類型設定
             SetCORSPolicy(context.OwinContext);
+
+            // 如果請求為預檢請求則設為完成直接回傳
             if (context.Request.Method == "OPTIONS") {
                 context.RequestCompleted();
                 return Task.FromResult(0);
@@ -27,17 +33,18 @@ namespace Thak_tshehWebAPI.Security
 
 
         /// <summary>
-        /// add the allow-origin header only if the origin domain is found on the allowedOrigin list
+        /// 依請求來源配置 CORS 允許類型設定
         /// </summary>
         /// <param name="context"></param>
         private void SetCORSPolicy(IOwinContext context)
         {
+            // 取出允許跨域的網址 (放在 Web.config 的 appSettings)
             string allowedUrls = ConfigurationManager.AppSettings["allowedOrigins"];
 
+            // 有填寫允許跨域的網址，就分割取出判斷請求的來源是否等於允許跨域的網址，並將允許網址加入 Headers
             if (!String.IsNullOrWhiteSpace(allowedUrls)) {
                 var list = allowedUrls.Split(',');
                 if (list.Length > 0) {
-
                     string origin = context.Request.Headers.Get("Origin");
                     var found = list.Where(item => item == origin).Any();
                     if (found) {
@@ -46,9 +53,10 @@ namespace Thak_tshehWebAPI.Security
                     }
                 }
             }
-
+            // 配置允許請求的 Headers 內容
             context.Response.Headers.Add("Access-Control-Allow-Headers",
                                    new string[] { "Authorization", "Content-Type" });
+            // 配置允許請求的 Headers 方法
             context.Response.Headers.Add("Access-Control-Allow-Methods",
                                    new string[] { "OPTIONS", "GET", "POST", "PUT", "DELETE"});
         }

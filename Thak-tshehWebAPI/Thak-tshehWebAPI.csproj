@@ -272,7 +272,6 @@
     <Compile Include="Controllers\UserFollowersSetController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\UsersSetController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -318,14 +317,30 @@
     <Compile Include="Models\ActivityLog.cs" />
     <Compile Include="Models\ActivityOpinion.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\Attributes\ApiMessageResult.cs" />
     <Compile Include="Models\Attributes\ApiResult.cs" />
     <Compile Include="Models\CompanyInfo.cs" />
     <Compile Include="Models\EnumDB.cs" />
     <Compile Include="Models\OrganizerLog.cs" />
+    <Compile Include="Models\Params\ActivityOpinionParam.cs" />
+    <Compile Include="Models\Params\RecommendActivityParam.cs" />
+    <Compile Include="Models\Params\SearchActivityParam.cs" />
     <Compile Include="Models\TokenLog.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserFollowers.cs" />
+    <Compile Include="Models\Vms\AccountVm.cs" />
+    <Compile Include="Models\Vms\ActivityDataVm.cs" />
+    <Compile Include="Models\Vms\ActivityDetailVm.cs" />
+    <Compile Include="Models\Vms\ActivityOpinionListVm.cs" />
+    <Compile Include="Models\Vms\ActivityViewsVm.cs" />
+    <Compile Include="Models\Vms\CompanyInfoVm.cs" />
     <Compile Include="Models\Vms\ContactUsVm.cs" />
+    <Compile Include="Models\Vms\LoginVm.cs" />
+    <Compile Include="Models\Vms\PasswordMailResetVm.cs" />
+    <Compile Include="Models\Vms\PasswordResetVm.cs" />
+    <Compile Include="Models\Vms\PasswordVm.cs" />
+    <Compile Include="Models\Vms\SearchActivityVm.cs" />
+    <Compile Include="Models\Vms\VerifyMailVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\ActivityRequest.cs" />
     <Compile Include="Security\AuthorizationServerProvider.cs" />

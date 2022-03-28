@@ -1,22 +1,30 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Thak_tshehWebAPI.Models
+namespace Thak_tshehWebAPI.Models.Vms
 {
+    /// <summary>
+    /// 公司相關資料回應
+    /// </summary>
+    public class CompanyInfoVm
+    {
+        /// <summary>
+        /// 狀態
+        /// </summary>
+        public bool Status { get; set; }
+
+        /// <summary>
+        /// 公司資料
+        /// </summary>
+        public CompanyInfoData Data { get; set; }
+
+    }
+
     /// <summary>
     /// 公司資料
     /// </summary>
-    public class CompanyInfo
+    public class CompanyInfoData 
     {
-        /// <summary>
-        /// 編號
-        /// </summary>
-        [Key]
-        [Display(Name = "編號")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         /// <summary>
         /// 公司名稱
         /// </summary>
@@ -70,11 +78,5 @@ namespace Thak_tshehWebAPI.Models
         /// </summary>
         [Display(Name = "常見問題")]
         public string Questions { get; set; }
-
-        /// <summary>
-        /// 建立時間
-        /// </summary>
-        [Display(Name = "建立時間")]
-        public DateTime? CreatDate { get; set; }
     }
 }

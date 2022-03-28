@@ -1,13 +1,13 @@
 ﻿namespace Thak_tshehWebAPI.Models.Vms
 {
     /// <summary>
-    /// 留言資料
+    /// 密碼資料
     /// </summary>
-    public class ContactUsVm
+    public class PasswordVm
     {
         /// <summary>
-        /// 訊息
+        /// 密碼
         /// </summary>
-        public string Message { get; set; }
+        public string Password { get; set; }
     }
 }

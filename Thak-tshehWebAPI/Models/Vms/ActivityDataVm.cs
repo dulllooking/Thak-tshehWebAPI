@@ -1,13 +1,13 @@
 ﻿namespace Thak_tshehWebAPI.Models.Vms
 {
     /// <summary>
-    /// 留言資料
+    /// 活動基本資料
     /// </summary>
-    public class ContactUsVm
+    public class ActivityDataVm
     {
         /// <summary>
-        /// 訊息
+        /// 活動ID
         /// </summary>
-        public string Message { get; set; }
+        public int ActivityId { get; set; }
     }
 }

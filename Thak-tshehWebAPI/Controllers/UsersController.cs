@@ -32,7 +32,7 @@ namespace Thak_tshehWebAPI.Controllers
     public class UsersController : ApiController
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
-        private const int expiryTime = 1;
+        private const int expiryTime = 1; // 信箱開通碼效期
 
         // POST: api/users/contact-us
         /// <summary>
@@ -64,8 +64,11 @@ namespace Thak_tshehWebAPI.Controllers
             return Ok(new ApiResult { Status = true, JwtToken = jwtToken });
         }
 
-        // 1-8 Navbar 個人資料+頭貼 (JWT)
         // GET: api/users/profile-data
+        /// <summary>
+        /// 1-8 Navbar 個人資料+頭貼 (JWT)
+        /// </summary>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpGet]
         [Route("api/users/profile-data")]
@@ -92,8 +95,11 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 1-9 登出驗證票
         // DELETE: api/users/logout
+        /// <summary>
+        /// 1-9 登出驗證票
+        /// </summary>
+        /// <returns></returns>
         [HttpDelete]
         [Route("api/users/logout")]
         public IHttpActionResult Logout()
@@ -103,11 +109,15 @@ namespace Thak_tshehWebAPI.Controllers
             string jwtToken = jwtAuthUtil.RevokeToken();
 
             // 登出刷新
-            return Ok(new { Status = true, JwtToken = jwtToken });
+            return Ok(new ApiResult { Status = true, JwtToken = jwtToken });
         }
 
-        // 1-10 1-11 1-12 滾動區資料 (JWT)
         // GET: api/activities/new9/type/類型(0~2)
+        /// <summary>
+        /// 1-10 1-11 1-12 滾動區資料 (JWT)
+        /// </summary>
+        /// <param name="type">類型(0~2)</param>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpGet]
         [Route("api/users/activities/new9/type/{type}")]
@@ -140,11 +150,15 @@ namespace Thak_tshehWebAPI.Controllers
             return Json(new { Status = true, JwtToken = jwtToken, Data = info });
         }
 
-        // 2-1 未開通註冊+發信
         // POST: api/users/sign-up
+        /// <summary>
+        /// 2-1 未開通註冊+發信
+        /// </summary>
+        /// <param name="userData">登入資料</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/users/sign-up")]
-        public IHttpActionResult SignUp([FromBody] LoginRequest userData)
+        public IHttpActionResult SignUp(LoginVm userData)
         {
             // 必填欄位資料檢查
             if (!ModelState.IsValid) return Ok(new { Status = false, Message = "欄位資料不符" });
@@ -200,11 +214,15 @@ namespace Thak_tshehWebAPI.Controllers
             return Ok(new { Status = true, Message = "註冊成功，請至信箱點選開通帳號連結登入!" });
         }
 
-        // 2-2 會員登入
         // POST: api/users/login
+        /// <summary>
+        /// 2-2 會員登入
+        /// </summary>
+        /// <param name="userData">登入資料</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/users/login")]
-        public IHttpActionResult Login([FromBody] LoginRequest userData)
+        public IHttpActionResult Login(LoginVm userData)
         {
             // 查詢指定帳號
             var userQuery = db.User.FirstOrDefault(x => x.Account == userData.Account);
@@ -248,19 +266,23 @@ namespace Thak_tshehWebAPI.Controllers
             }
 
             // 一般登入
-            return Ok(new { Status = true, JwtToken = jwtToken });
+            return Ok(new ApiResult { Status = true, JwtToken = jwtToken });
         }
 
-        // 2-3 註冊開通
         // Put: api/users/auth-mail
+        /// <summary>
+        /// 2-3 註冊開通
+        /// </summary>
+        /// <param name="mailData">信箱驗證資料</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("api/users/auth-mail")]
-        public IHttpActionResult AuthMail([FromBody] LoginRequest userData)
+        public IHttpActionResult AuthMail(VerifyMailVm mailData)
         {
             // 查詢指定帳號
-            var userQuery = db.User.FirstOrDefault(x => x.CheckMailCode == userData.Guid);
+            var userQuery = db.User.FirstOrDefault(x => x.CheckMailCode == mailData.Guid);
 
-            if (userData.Guid == null) return Ok(new { Status = false, Message = "未填欄位" });
+            if (mailData.Guid == null) return Ok(new { Status = false, Message = "未填欄位" });
             // 帳號檢查
             else if (userQuery == null) return Ok(new { Status = false, Message = "帳號驗證碼不存在" });
 
@@ -288,19 +310,23 @@ namespace Thak_tshehWebAPI.Controllers
             return Ok(new { Status = true, Message = "帳號開通成功，請重新登入!" });
         }
 
-        // 2-4 忘記密碼發信
         // Put: api/users/forget-password-mail
+        /// <summary>
+        /// 2-4 忘記密碼發信
+        /// </summary>
+        /// <param name="accountData">帳號資料</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("api/users/forget-password-mail")]
-        public IHttpActionResult SendResetPasswordMail([FromBody] LoginRequest userData)
+        public IHttpActionResult SendResetPasswordMail(AccountVm accountData)
         {
             // 查詢指定帳號
-            var userQuery = db.User.FirstOrDefault(x => x.Account == userData.Account);
+            var userQuery = db.User.FirstOrDefault(x => x.Account == accountData.Account);
 
-            if (userData.Account == null) return Ok(new { Status = false, Message = "未填欄位" });
+            if (accountData.Account == null) return Ok(new { Status = false, Message = "未填欄位" });
             // 帳號檢查
             else if (userQuery == null) return Ok(new { Status = false, Message = "帳號不存在" });
-            else if (!Mail.RegexEmail(userData.Account)) return Ok(new { Status = false, Message = "信箱格式不符" });
+            else if (!Mail.RegexEmail(accountData.Account)) return Ok(new { Status = false, Message = "信箱格式不符" });
 
             // 生成重設密碼連結，發信
             string resetLink;
@@ -315,19 +341,23 @@ namespace Thak_tshehWebAPI.Controllers
             return Ok(new { Status = true, Message = "已發送重設密碼連結至信箱，請至信箱收信點選連結重設密碼" });
         }
 
-        // 2-5 驗證舊密碼 (JWT)
         // POST: api/users/auth-password
+        /// <summary>
+        /// 2-5 驗證舊密碼 (JWT)
+        /// </summary>
+        /// <param name="passwordData">密碼資料</param>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpPost]
         [Route("api/users/auth-password")]
-        public IHttpActionResult AuthUserPassword([FromBody] LoginRequest userData)
+        public IHttpActionResult AuthUserPassword(PasswordVm passwordData)
         {
             // 必填欄位資料檢查 (需在類別加限制條件標籤才有效)
             if (!ModelState.IsValid) return Ok(new { Status = false, Message = "未填欄位" });
-            if (userData == null) return Ok(new { Status = false, Message = "未填欄位" });
+            if (passwordData == null) return Ok(new { Status = false, Message = "未填欄位" });
             // 密碼格式不符
-            if (String.IsNullOrEmpty(userData.Password)) return Ok(new { Status = false, Message = "密碼未填" });
-            else if (!Mail.RegexPassword(userData.Password)) return Ok(new { Status = false, Message = "密碼格式不符" });
+            if (String.IsNullOrEmpty(passwordData.Password)) return Ok(new { Status = false, Message = "密碼未填" });
+            else if (!Mail.RegexPassword(passwordData.Password)) return Ok(new { Status = false, Message = "密碼格式不符" });
 
             // 解密 JwtToken 取出資料回傳
             var userToken = JwtAuthFilter.GetToken(Request.Headers.Authorization.Parameter);
@@ -338,28 +368,32 @@ namespace Thak_tshehWebAPI.Controllers
             // 查詢指定帳號
             var userQuery = db.User.Find((int)userToken["Id"]);
             // 登入密碼加鹽雜湊結果
-            string hashPassword = HashPassword.GenerateHashWithSalt(userData.Password, userQuery.Salt);
+            string hashPassword = HashPassword.GenerateHashWithSalt(passwordData.Password, userQuery.Salt);
             // 密碼檢查
             if (!(userQuery.HashPassword.Equals(hashPassword))) return Ok(new { Status = false, Message = "密碼不正確" });
 
             // 送出刷新 JwtToken
-            return Ok(new { Status = true, JwtToken = jwtToken });
+            return Ok(new ApiResult { Status = true, JwtToken = jwtToken });
         }
 
-        // 2-6 登入時重設密碼 (JWT)
         // POST: api/users/login-reset-password
+        /// <summary>
+        /// 2-6 登入時重設密碼 (JWT)
+        /// </summary>
+        /// <param name="resetData">重設密碼資料</param>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpPost]
         [Route("api/users/login-reset-password")]
-        public IHttpActionResult LoginResetPassword([FromBody] LoginRequest userData)
+        public IHttpActionResult LoginResetPassword(PasswordResetVm resetData)
         {
             // 必填欄位資料檢查
             if (!ModelState.IsValid) return Ok(new { Status = false, Message = "未填欄位" });
-            if (userData == null) return Ok(new { Status = false, Message = "未填欄位" });
+            if (resetData == null) return Ok(new { Status = false, Message = "未填欄位" });
             // 密碼格式不符
-            if (String.IsNullOrEmpty(userData.Password) || String.IsNullOrEmpty(userData.CheckPassword)) return Ok(new { Status = false, Message = "密碼未填" });
-            else if (!Mail.RegexPassword(userData.Password) || !Mail.RegexPassword(userData.CheckPassword)) return Ok(new { Status = false, Message = "密碼格式不符" });
-            else if (!userData.Password.Equals(userData.CheckPassword)) return Ok(new { Status = false, Message = "填入密碼不同，請重新輸入" });
+            if (String.IsNullOrEmpty(resetData.Password) || String.IsNullOrEmpty(resetData.CheckPassword)) return Ok(new { Status = false, Message = "密碼未填" });
+            else if (!Mail.RegexPassword(resetData.Password) || !Mail.RegexPassword(resetData.CheckPassword)) return Ok(new { Status = false, Message = "密碼格式不符" });
+            else if (!resetData.Password.Equals(resetData.CheckPassword)) return Ok(new { Status = false, Message = "填入密碼不同，請重新輸入" });
 
             // 解密 JwtToken 取出資料回傳
             var userToken = JwtAuthFilter.GetToken(Request.Headers.Authorization.Parameter);
@@ -372,7 +406,7 @@ namespace Thak_tshehWebAPI.Controllers
             // 生成密碼雜湊鹽
             string saltStr = HashPassword.CreateSalt();
             // 登入密碼加鹽雜湊結果
-            string hashPassword = HashPassword.GenerateHashWithSalt(userData.Password, saltStr);
+            string hashPassword = HashPassword.GenerateHashWithSalt(resetData.Password, saltStr);
 
             // 存入新密碼
             userQuery.Salt = saltStr;
@@ -380,31 +414,35 @@ namespace Thak_tshehWebAPI.Controllers
             db.SaveChanges();
 
             // 刷新 JwtToken
-            return Ok(new { Status = true, JwtToken = jwtToken });
+            return Ok(new ApiResult { Status = true, JwtToken = jwtToken });
         }
 
-        // 2-7 信箱連入重設密碼
         // Post: api/users/mail-reset-password
+        /// <summary>
+        /// 2-7 信箱連入重設密碼
+        /// </summary>
+        /// <param name="resetData">信箱連入重設密碼資料</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/users/mail-reset-password")]
-        public IHttpActionResult MailLinkResetPassword([FromBody] LoginRequest userData)
+        public IHttpActionResult MailLinkResetPassword(PasswordMailResetVm resetData)
         {
             // 查詢指定帳號
-            var userQuery = db.User.FirstOrDefault(x => x.CheckMailCode == userData.Guid);
+            var userQuery = db.User.FirstOrDefault(x => x.CheckMailCode == resetData.Guid);
 
-            if (userData.Guid == null) return Ok(new { Status = false, Message = "未填欄位" });
+            if (resetData.Guid == null) return Ok(new { Status = false, Message = "未填欄位" });
             else if (userQuery.MailCodeCreatDate.AddMinutes(30) > DateTime.Now ) return Ok(new { Status = false, Message = "連結驗證碼超過30分鐘" });
             // 帳號檢查
             else if (userQuery == null) return Ok(new { Status = false, Message = "連結驗證碼不存在" });
             // 密碼格式不符
-            if (String.IsNullOrEmpty(userData.Password) || String.IsNullOrEmpty(userData.CheckPassword)) return Ok(new { Status = false, Message = "密碼未填" });
-            else if (!Mail.RegexPassword(userData.Password) || !Mail.RegexPassword(userData.CheckPassword)) return Ok(new { Status = false, Message = "密碼格式不符" });
-            else if (!userData.Password.Equals(userData.CheckPassword)) return Ok(new { Status = false, Message = "填入密碼不同，請重新輸入" });
+            if (String.IsNullOrEmpty(resetData.Password) || String.IsNullOrEmpty(resetData.CheckPassword)) return Ok(new { Status = false, Message = "密碼未填" });
+            else if (!Mail.RegexPassword(resetData.Password) || !Mail.RegexPassword(resetData.CheckPassword)) return Ok(new { Status = false, Message = "密碼格式不符" });
+            else if (!resetData.Password.Equals(resetData.CheckPassword)) return Ok(new { Status = false, Message = "填入密碼不同，請重新輸入" });
 
             // 生成密碼雜湊鹽
             string saltStr = HashPassword.CreateSalt();
             // 登入密碼加鹽雜湊結果
-            string hashPassword = HashPassword.GenerateHashWithSalt(userData.Password, saltStr);
+            string hashPassword = HashPassword.GenerateHashWithSalt(resetData.Password, saltStr);
 
             // 更新密碼，註銷驗證碼
             userQuery.CheckMailCode = "";
@@ -416,8 +454,18 @@ namespace Thak_tshehWebAPI.Controllers
             return Ok(new { Status = true, Message = "密碼重設成功，請重新登入" });
         }
 
-        // 3-1 已登入分類搜尋+排序+分頁功能 (JWT)
-        // GET: api/users/activity/search/每頁幾筆/第幾頁/類型/分類/排序/關鍵字 (用空格區隔最多可查兩個關鍵字)
+        // GET: api/users/activity/search/每頁幾筆/第幾頁/類型/分類/地區/排序/關鍵字 (用空格區隔最多可查兩個關鍵字)
+        /// <summary>
+        /// 3-1 已登入分類搜尋+排序+分頁功能 (JWT)
+        /// </summary>
+        /// <param name="split">每頁幾筆</param>
+        /// <param name="page">第幾頁</param>
+        /// <param name="type">類型</param>
+        /// <param name="classify">分類</param>
+        /// <param name="area">地區</param>
+        /// <param name="sorting">排序</param>
+        /// <param name="query">關鍵字 (用空格區隔最多可查兩個關鍵字)</param>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpGet]
         [Route("api/users/activity/search/{split:int?}/{page:int?}/{type:int?}/{classify:int?}/{area:int?}/{sorting:int?}/{query?}")]
@@ -477,7 +525,7 @@ namespace Thak_tshehWebAPI.Controllers
                     info = info.OrderByDescending(x => x.Views);
                     break;
                 case 2: // 日期由新到舊 => 以開放報名時間排序，由近到遠
-                    info = info.OrderByDescending(x => x.ActivityStartDate);
+                    info = info.OrderBy(x => x.ActivityStartDate);
                     break;
                 default:
                     break;
@@ -500,14 +548,18 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 3-2 收藏/取消收藏活動 (JWT)
         // Put: api/users/activity/collect
+        /// <summary>
+        /// 3-2 收藏/取消收藏活動 (JWT)
+        /// </summary>
+        /// <param name="activityData">活動基本資料</param>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpPut]
         [Route("api/users/activity/collect")]
-        public IHttpActionResult SetCollect([FromBody] LoginRequest userData)
+        public IHttpActionResult SetCollect(ActivityDataVm activityData)
         {
-            if (userData.ActivityId <= 0) return Ok(new { Status = false, Message = "此活動不存在" });
+            if (activityData.ActivityId <= 0) return Ok(new { Status = false, Message = "此活動不存在" });
 
             // 解密 JwtToken 取出資料回傳
             var userToken = JwtAuthFilter.GetToken(Request.Headers.Authorization.Parameter);
@@ -521,9 +573,9 @@ namespace Thak_tshehWebAPI.Controllers
             string messageStr = "新增收藏成功";
 
             // 活動收藏執行判斷
-            if (collectQuery.Any(x => x.ActivityId == userData.ActivityId)) {
+            if (collectQuery.Any(x => x.ActivityId == activityData.ActivityId)) {
                 // 已有收藏記錄時刪除記錄
-                db.ActivityCollect.Remove(collectQuery.FirstOrDefault(x => x.ActivityId == userData.ActivityId));
+                db.ActivityCollect.Remove(collectQuery.FirstOrDefault(x => x.ActivityId == activityData.ActivityId));
                 db.SaveChanges();
                 messageStr = "取消收藏成功";
                 return Ok(new { Status = true, JwtToken = jwtToken, Message = messageStr });
@@ -533,17 +585,23 @@ namespace Thak_tshehWebAPI.Controllers
             ActivityCollect activityCollect = new ActivityCollect
             {
                 UserId = userId,
-                ActivityId = userData.ActivityId,
+                ActivityId = activityData.ActivityId,
                 CreatDate = DateTime.Now
             };
             db.ActivityCollect.Add(activityCollect);
-            db.Activity.FirstOrDefault(x => x.Id == userData.ActivityId).CollectNumber += 1;
+            db.Activity.FirstOrDefault(x => x.Id == activityData.ActivityId).CollectNumber += 1;
             db.SaveChanges();
             return Ok(new { Status = true,  JwtToken = jwtToken, Message = messageStr });
         }
 
-        // 4-5 即將截止報名資料 (JWT)
         // GET: api/users/activity/final/type/類型/每頁幾筆/第幾頁
+        /// <summary>
+        /// 4-5 即將截止報名資料 (JWT)
+        /// </summary>
+        /// <param name="type">類型</param>
+        /// <param name="split">每頁幾筆</param>
+        /// <param name="page">第幾頁</param>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpGet]
         [Route("api/users/activity/final/type/{type:int?}/{split:int?}/{page:int?}")]
@@ -597,8 +655,14 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 4-6 最多人報名資料 (JWT)
         // GET: api/users/activity/hot/type/類型/每頁幾筆/第幾頁
+        /// <summary>
+        /// 4-6 最多人報名資料 (JWT)
+        /// </summary>
+        /// <param name="type">類型</param>
+        /// <param name="split">每頁幾筆</param>
+        /// <param name="page">第幾頁</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("api/users/activity/hot/type/{type:int?}/{split:int?}/{page:int?}")]
         public IHttpActionResult GetHotActivity(int type = 0, int split = 3, int page = 1)
@@ -651,8 +715,14 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 4-7 新推出資料 (JWT)
         // GET: api/users/activity/new/type/類型/每頁幾筆/第幾頁
+        /// <summary>
+        /// 4-7 新推出資料 (JWT)
+        /// </summary>
+        /// <param name="type">類型</param>
+        /// <param name="split">每頁幾筆</param>
+        /// <param name="page">第幾頁</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("api/users/activity/new/type/{type:int?}/{split:int?}/{page:int?}")]
         public IHttpActionResult GetNewActivity(int type = 0, int split = 3, int page = 1)
@@ -705,8 +775,12 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 5-4 確認是否已報名過活動 (JWT)
         // GET: api/users/activity/attend/status/活動ID
+        /// <summary>
+        /// 5-4 確認是否已報名過活動 (JWT)
+        /// </summary>
+        /// <param name="id">活動ID</param>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpGet]
         [Route("api/users/activity/attend/status/{id}")]
@@ -731,8 +805,12 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 5-5 確認是否已收藏活動 (JWT)
         // GET: api/users/activity/collect/status/活動ID
+        /// <summary>
+        /// 5-5 確認是否已收藏活動 (JWT)
+        /// </summary>
+        /// <param name="id">活動ID</param>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpGet]
         [Route("api/users/activity/collect/status/{id}")]
@@ -757,8 +835,11 @@ namespace Thak_tshehWebAPI.Controllers
             });
         }
 
-        // 6-1 報名活動-個資帶入 (JWT)
         // POST: api/users/attend-data
+        /// <summary>
+        /// 6-1 報名活動-個資帶入 (JWT)
+        /// </summary>
+        /// <returns></returns>
         [JwtAuthFilter]
         [HttpPost]
         [Route("api/users/attend-data")]

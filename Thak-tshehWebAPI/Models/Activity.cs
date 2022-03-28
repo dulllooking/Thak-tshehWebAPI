@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace Thak_tshehWebAPI.Models
 {
@@ -204,7 +202,6 @@ namespace Thak_tshehWebAPI.Models
         /// 活動資訊收藏人數
         /// </summary>
         [Display(Name = "活動資訊收藏人數")]
-        [JsonProperty("collectNumber")]
         public int CollectNumber { get; set; }
 
         /// <summary>

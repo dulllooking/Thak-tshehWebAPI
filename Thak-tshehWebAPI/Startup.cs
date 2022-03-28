@@ -22,7 +22,7 @@ namespace Thak_tshehWebAPI
         /// <param name="app"></param>
         public void Configuration(IAppBuilder app)
         {
-            // 啟用跨域及驗證
+            // 啟用跨域及驗證配置
             ConfigureAuth(app);
 
             var config = new HttpConfiguration();
@@ -53,15 +53,19 @@ namespace Thak_tshehWebAPI
             config.EnsureInitialized();
         }
 
+        /// <summary>
+        /// 啟用跨域及驗證配置
+        /// </summary>
+        /// <param name="app"></param>
         private void ConfigureAuth(IAppBuilder app)
         {
-            // Configure the application for OAuth based flow
+            // 建立 OAuth 配置
             var oAuthOptions = new OAuthAuthorizationServerOptions
             {
                 Provider = new AuthorizationServerProvider()
             };
 
-            // Enable the application to use bearer tokens to authenticate users
+            // 啟用 OAuth2 bearer tokens 驗證並加入配置
             app.UseOAuthAuthorizationServer(oAuthOptions);
         }
     }

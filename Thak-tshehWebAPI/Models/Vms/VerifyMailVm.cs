@@ -1,13 +1,13 @@
 ﻿namespace Thak_tshehWebAPI.Models.Vms
 {
     /// <summary>
-    /// 留言資料
+    /// 信箱驗證資料
     /// </summary>
-    public class ContactUsVm
+    public class VerifyMailVm
     {
         /// <summary>
-        /// 訊息
+        /// 信箱驗證 GUID
         /// </summary>
-        public string Message { get; set; }
+        public string Guid { get; set; }
     }
 }

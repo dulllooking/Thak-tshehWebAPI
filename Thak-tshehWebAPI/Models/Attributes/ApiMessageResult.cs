@@ -1,9 +1,9 @@
 ﻿namespace Thak_tshehWebAPI.Models.Attributes
 {
     /// <summary>
-    /// 執行結果
+    /// 執行結果訊息
     /// </summary>
-    public class ApiResult
+    public class ApiMessageResult
     {
         /// <summary>
         /// 狀態
@@ -11,8 +11,8 @@
         public bool Status { get; set; }
 
         /// <summary>
-        /// JwtToken
+        /// Message
         /// </summary>
-        public string JwtToken { get; set; }
+        public string Message { get; set; }
     }
 }
