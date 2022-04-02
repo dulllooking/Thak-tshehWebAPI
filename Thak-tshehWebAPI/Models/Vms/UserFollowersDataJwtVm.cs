@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Thak_tshehWebAPI.Models.Vms
 {
     /// <summary>
-    /// 活動詳情資料回應
+    /// 會員追蹤者資料回應JWT
     /// </summary>
-    public class ActivityDetailVm
+    public class UserFollowersDataJwtVm
     {
         /// <summary>
         /// 狀態
@@ -15,31 +15,37 @@ namespace Thak_tshehWebAPI.Models.Vms
         public bool Status { get; set; }
 
         /// <summary>
-        /// 活動詳情資料
+        /// JwtToken
         /// </summary>
-        public ActivityDetailData Data { get; set; }
+        public string JwtToken { get; set; }
+
+        /// <summary>
+        /// 會員追蹤者資料內容JWT
+        /// </summary>
+        public UserFollowersDataJWT Data { get; set; }
     }
 
     /// <summary>
-    /// 活動詳情資料
+    /// 會員追蹤者資料內容JWT
     /// </summary>
-    public class ActivityDetailData 
+    public class UserFollowersDataJWT
     {
         /// <summary>
-        /// 活動資料全部內容
+        /// 追蹤者會員資料頁數
         /// </summary>
-        public Activity ActivityData { get; set; }
+        public int TotalPage { get; set; }
 
         /// <summary>
-        /// 活動舉辦者資料
+        /// 會員追蹤者資料JWT
         /// </summary>
-        public OrganizerData OrganizerData { get; set; }
+        public FollowersUserDataJWT[] Followers { get; set; }
+
     }
 
     /// <summary>
-    /// 活動舉辦者資料
+    /// 會員追蹤者資料JWT
     /// </summary>
-    public class OrganizerData 
+    public class FollowersUserDataJWT
     {
         /// <summary>
         /// 會員編號
@@ -77,18 +83,16 @@ namespace Thak_tshehWebAPI.Models.Vms
         public string NickName { get; set; }
 
         /// <summary>
-        /// Facebook連結
+        /// 會員追蹤者人數
         /// </summary>
-        [MaxLength(200)]
-        [Display(Name = "Facebook連結")]
-        public string FacebookLink { get; set; }
+        [Display(Name = "會員追蹤者人數")]
+        public int FollowersNumber { get; set; }
 
         /// <summary>
-        /// Instagram連結
+        /// 會員關注中人數
         /// </summary>
-        [MaxLength(200)]
-        [Display(Name = "Instagram連結")]
-        public string InstagramLink { get; set; }
+        [Display(Name = "會員關注中人數")]
+        public int FollowingNumber { get; set; }
 
         /// <summary>
         /// 關於我
@@ -98,15 +102,27 @@ namespace Thak_tshehWebAPI.Models.Vms
         public string AboutMe { get; set; }
 
         /// <summary>
-        /// 個人檔案瀏覽次數
+        /// 關注時間
         /// </summary>
-        [Display(Name = "個人檔案瀏覽次數")]
-        public int Views { get; set; }
+        [Display(Name = "關注時間")]
+        public DateTime? FollowingData { get; set; }
 
         /// <summary>
-        /// 建立時間
+        /// 追蹤者會員編號
         /// </summary>
-        [Display(Name = "建立時間")]
-        public DateTime? CreatDate { get; set; }
+        [Display(Name = "追蹤者會員編號")]
+        public int UserId { get; set; }
+
+        /// <summary>
+        /// 關注中會員編號
+        /// </summary>
+        [Display(Name = "關注中會員編號")]
+        public int FollowingUserId { get; set; }
+
+        /// <summary>
+        /// 是否關注中
+        /// </summary>
+        [Display(Name = "是否關注中")]
+        public bool Following { get; set; }
     }
 }

@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Thak_tshehWebAPI.Models.Vms
 {
     /// <summary>
-    /// 活動搜尋資料回應
+    /// 活動搜尋資料回應JWT
     /// </summary>
-    public class SearchActivityVm
+    public class SearchActivityJwtVm
     {
         /// <summary>
         /// 狀態
@@ -16,15 +16,20 @@ namespace Thak_tshehWebAPI.Models.Vms
         public bool Status { get; set; }
 
         /// <summary>
+        /// JwtToken
+        /// </summary>
+        public string JwtToken { get; set; }
+
+        /// <summary>
         /// 活動搜尋資料
         /// </summary>
-        public SearchActivityData Data { get; set; }
+        public SearchActivityDataJWT Data { get; set; }
     }
 
     /// <summary>
     /// 活動搜尋資料
     /// </summary>
-    public class SearchActivityData 
+    public class SearchActivityDataJWT
     {
         /// <summary>
         /// 活動搜尋資料頁數
@@ -32,15 +37,15 @@ namespace Thak_tshehWebAPI.Models.Vms
         public int TotalPage { get; set; }
 
         /// <summary>
-        /// 活動搜尋資料
+        /// 活動搜尋資料頁數
         /// </summary>
-        public ActivityData[] Activity { get; set; }
+        public ActivityDataJWT[] Activity { get; set; }
     }
 
     /// <summary>
     /// 活動搜尋資料
     /// </summary>
-    public class ActivityData
+    public class ActivityDataJWT
     {
         /// <summary>
         /// 活動編號
@@ -162,5 +167,11 @@ namespace Thak_tshehWebAPI.Models.Vms
         /// </summary>
         [Display(Name = "結束報名時間")]
         public DateTime EndAcceptDate { get; set; }
+
+        /// <summary>
+        /// 使用者是否收藏
+        /// </summary>
+        [Display(Name = "使用者是否收藏")]
+        public bool UserCollected { get; set; }
     }
 }

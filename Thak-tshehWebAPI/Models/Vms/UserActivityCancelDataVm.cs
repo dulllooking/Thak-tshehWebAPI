@@ -2,33 +2,46 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Thak_tshehWebAPI.Models.Vms
 {
     /// <summary>
-    /// 活動卡片資料回應
+    /// 會員取消活動資料回應
     /// </summary>
-    public class ActivityViewsVm
+    public class UserActivityCancelDataVm
     {
-
         /// <summary>
         /// 狀態
         /// </summary>
         public bool Status { get; set; }
 
         /// <summary>
-        /// 活動卡片資料
+        /// 會員取消活動資料內容
         /// </summary>
-        public ActivityViewsData[] Data { get; set; }
+        public UserActivityCancelData Data { get; set; }
     }
 
     /// <summary>
-    /// 活動卡片資料
+    /// 會員取消活動資料內容
     /// </summary>
-    public class ActivityViewsData
+    public class UserActivityCancelData
     {
+        /// <summary>
+        /// 會員取消活動資料頁數
+        /// </summary>
+        public int TotalPage { get; set; }
 
+        /// <summary>
+        /// 會員取消活動資料
+        /// </summary>
+        public ActivityCancelDetail[] MyActivity { get; set; }
+    }
+
+    /// <summary>
+    /// 會員取消活動資料
+    /// </summary>
+    public class ActivityCancelDetail
+    {
         /// <summary>
         /// 活動編號
         /// </summary>
@@ -53,8 +66,22 @@ namespace Thak_tshehWebAPI.Models.Vms
         /// 活動型態分類
         /// </summary>
         [Display(Name = "活動型態分類")]
-        [JsonConverter(typeof(StringEnumConverter))] // 列舉轉字串
+        [JsonConverter(typeof(StringEnumConverter))]
         public ActivityType ActivityType { get; set; }
+
+        /// <summary>
+        /// 活動場域分類
+        /// </summary>
+        [Display(Name = "活動場域分類")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ActivityVenue ActivityVenue { get; set; }
+
+        /// <summary>
+        /// 使用軟體分類
+        /// </summary>
+        [Display(Name = "使用軟體分類")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Software Software { get; set; }
 
         /// <summary>
         /// 活動開始時間
@@ -83,10 +110,16 @@ namespace Thak_tshehWebAPI.Models.Vms
         public string OrganizerName { get; set; }
 
         /// <summary>
-        /// 活動人數限制
+        /// 活動費用
         /// </summary>
-        [Display(Name = "活動人數限制")]
-        public int LimitNumber { get; set; }
+        [Display(Name = "活動費用")]
+        public int Price { get; set; }
+
+        /// <summary>
+        /// 目前報名人數
+        /// </summary>
+        [Display(Name = "目前報名人數")]
+        public int ApplicantNumber { get; set; }
 
         /// <summary>
         /// 活動檔案瀏覽次數
@@ -95,9 +128,21 @@ namespace Thak_tshehWebAPI.Models.Vms
         public int Views { get; set; }
 
         /// <summary>
-        /// 建立時間
+        /// 活動資訊收藏人數
         /// </summary>
-        [Display(Name = "建立時間")]
-        public DateTime? CreatDate { get; set; }
+        [Display(Name = "活動資訊收藏人數")]
+        public int CollectNumber { get; set; }
+
+        /// <summary>
+        /// 活動評價平均星數
+        /// </summary>
+        [Display(Name = "活動評價平均星數")]
+        public int EvaluateStars { get; set; }
+
+        /// <summary>
+        /// 活動評價數量
+        /// </summary>
+        [Display(Name = "活動評價數量")]
+        public int OpinionNumber { get; set; }
     }
 }

@@ -2,31 +2,34 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Thak_tshehWebAPI.Models.Vms
 {
     /// <summary>
-    /// 活動卡片資料回應
+    /// 活動卡片資料回應JWT
     /// </summary>
-    public class ActivityViewsVm
+    public class ActivityViewsJwtVm
     {
-
         /// <summary>
         /// 狀態
         /// </summary>
         public bool Status { get; set; }
 
         /// <summary>
+        /// JwtToken
+        /// </summary>
+        public string JwtToken { get; set; }
+
+        /// <summary>
         /// 活動卡片資料
         /// </summary>
-        public ActivityViewsData[] Data { get; set; }
+        public ActivityViewsDataJWT[] Data { get; set; }
     }
 
     /// <summary>
     /// 活動卡片資料
     /// </summary>
-    public class ActivityViewsData
+    public class ActivityViewsDataJWT
     {
 
         /// <summary>
@@ -99,5 +102,11 @@ namespace Thak_tshehWebAPI.Models.Vms
         /// </summary>
         [Display(Name = "建立時間")]
         public DateTime? CreatDate { get; set; }
+
+        /// <summary>
+        /// 使用者是否收藏
+        /// </summary>
+        [Display(Name = "使用者是否收藏")]
+        public bool UserCollected { get; set; }
     }
 }

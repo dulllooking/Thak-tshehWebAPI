@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Thak_tshehWebAPI.Models.Vms
 {
     /// <summary>
-    /// 活動搜尋資料回應
+    /// 會員完成活動資料回應
     /// </summary>
-    public class SearchActivityVm
+    public class UserActivityAttendDoneDataVm
     {
         /// <summary>
         /// 狀態
@@ -16,31 +16,31 @@ namespace Thak_tshehWebAPI.Models.Vms
         public bool Status { get; set; }
 
         /// <summary>
-        /// 活動搜尋資料
+        /// 會員完成活動資料內容
         /// </summary>
-        public SearchActivityData Data { get; set; }
+        public UserActivityAttendDoneData Data { get; set; }
     }
 
     /// <summary>
-    /// 活動搜尋資料
+    /// 會員完成活動資料內容
     /// </summary>
-    public class SearchActivityData 
+    public class UserActivityAttendDoneData
     {
         /// <summary>
-        /// 活動搜尋資料頁數
+        /// 會員參加活動資料頁數
         /// </summary>
         public int TotalPage { get; set; }
 
         /// <summary>
-        /// 活動搜尋資料
+        /// 會員完成活動資料
         /// </summary>
-        public ActivityData[] Activity { get; set; }
+        public ActivityAttendDoneDetail[] MyActivity { get; set; }
     }
 
     /// <summary>
-    /// 活動搜尋資料
+    /// 會員完成活動資料
     /// </summary>
-    public class ActivityData
+    public class ActivityAttendDoneDetail
     {
         /// <summary>
         /// 活動編號
@@ -63,6 +63,27 @@ namespace Thak_tshehWebAPI.Models.Vms
         public string Image { get; set; }
 
         /// <summary>
+        /// 活動型態分類
+        /// </summary>
+        [Display(Name = "活動型態分類")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ActivityType ActivityType { get; set; }
+
+        /// <summary>
+        /// 活動場域分類
+        /// </summary>
+        [Display(Name = "活動場域分類")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ActivityVenue ActivityVenue { get; set; }
+
+        /// <summary>
+        /// 使用軟體分類
+        /// </summary>
+        [Display(Name = "使用軟體分類")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Software Software { get; set; }
+
+        /// <summary>
         /// 活動開始時間
         /// </summary>
         [Display(Name = "活動開始時間")]
@@ -73,12 +94,6 @@ namespace Thak_tshehWebAPI.Models.Vms
         /// </summary>
         [Display(Name = "活動結束時間")]
         public DateTime ActivityEndDate { get; set; }
-
-        /// <summary>
-        /// 活動人數限制
-        /// </summary>
-        [Display(Name = "活動人數限制")]
-        public int LimitNumber { get; set; }
 
         /// <summary>
         /// 活動簡介
@@ -95,37 +110,29 @@ namespace Thak_tshehWebAPI.Models.Vms
         public string OrganizerName { get; set; }
 
         /// <summary>
-        /// 活動型態分類
+        /// 活動視訊連結
         /// </summary>
-        [Display(Name = "活動型態分類")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ActivityType ActivityType { get; set; }
+        [MaxLength(200)]
+        [Display(Name = "活動視訊連結")]
+        public string Link { get; set; }
 
         /// <summary>
-        /// 活動內容分類
+        /// 活動費用
         /// </summary>
-        [Display(Name = "活動內容分類")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ActivityClass ActivityClass { get; set; }
-
-        /// <summary>
-        /// 地區分類
-        /// </summary>
-        [Display(Name = "地區分類")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Area ActivityArea { get; set; }
-
-        /// <summary>
-        /// 活動檔案瀏覽次數
-        /// </summary>
-        [Display(Name = "活動檔案瀏覽次數")]
-        public int Views { get; set; }
+        [Display(Name = "活動費用")]
+        public int Price { get; set; }
 
         /// <summary>
         /// 目前報名人數
         /// </summary>
         [Display(Name = "目前報名人數")]
         public int ApplicantNumber { get; set; }
+
+        /// <summary>
+        /// 活動檔案瀏覽次數
+        /// </summary>
+        [Display(Name = "活動檔案瀏覽次數")]
+        public int Views { get; set; }
 
         /// <summary>
         /// 活動資訊收藏人數
@@ -146,21 +153,9 @@ namespace Thak_tshehWebAPI.Models.Vms
         public int OpinionNumber { get; set; }
 
         /// <summary>
-        /// 活動費用
+        /// 活動評價完成
         /// </summary>
-        [Display(Name = "活動費用")]
-        public int Price { get; set; }
-
-        /// <summary>
-        /// 開始報名時間
-        /// </summary>
-        [Display(Name = "開始報名時間")]
-        public DateTime StartAcceptDate { get; set; }
-
-        /// <summary>
-        /// 結束報名時間
-        /// </summary>
-        [Display(Name = "結束報名時間")]
-        public DateTime EndAcceptDate { get; set; }
+        [Display(Name = "活動評價完成")]
+        public bool OpinionsDone { get; set; }
     }
 }
