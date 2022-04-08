@@ -26,6 +26,10 @@ namespace Thak_tshehWebAPI
             ConfigureAuth(app);
 
             var config = new HttpConfiguration();
+            // 針對 JSON 資料使用 camel (JSON 回應會改 camel，但 Swagger 提示不會)
+            //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            // OWIN Swagger 設定
             app.UseSwaggerUi3(typeof(Startup).Assembly, settings =>
             {
                 // 針對 WebAPI，指定路由包含 Action 名稱

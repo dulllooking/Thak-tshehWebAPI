@@ -1721,7 +1721,7 @@ namespace Thak_tshehWebAPI.Controllers
         [HttpPut]
         [SwaggerResponse(typeof(ApiMessageJwtResult))]
         [Route("api/users/activity/attend/cancel/state")]
-        public IHttpActionResult SetActivityAttendCancel(ActivityLog logData)
+        public IHttpActionResult SetActivityAttendCancel(ActivityCancelVm logData)
         {
             // 解密 JwtToken 取出資料回傳
             var userToken = JwtAuthFilter.GetToken(Request.Headers.Authorization.Parameter);
@@ -1760,7 +1760,7 @@ namespace Thak_tshehWebAPI.Controllers
         [HttpPost]
         [SwaggerResponse(typeof(ApiMessageJwtResult))]
         [Route("api/users/activity/attend/opinion")]
-        public IHttpActionResult SetAttendOpinion(ActivityOpinion opinionData)
+        public IHttpActionResult SetAttendOpinion(ActivityOpinionVm opinionData)
         {
             // 解密 JwtToken 取出資料回傳
             var userToken = JwtAuthFilter.GetToken(Request.Headers.Authorization.Parameter);
@@ -1804,6 +1804,7 @@ namespace Thak_tshehWebAPI.Controllers
 
                 return Ok(new ApiMessageJwtResult { Status = false, JwtToken = jwtToken, Message = ex.Message });
             }
+
             return Ok(new ApiMessageJwtResult
             {
                 Status = true,

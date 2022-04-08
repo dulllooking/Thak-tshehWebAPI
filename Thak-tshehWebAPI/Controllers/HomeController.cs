@@ -1,21 +1,23 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
 namespace Thak_tshehWebAPI.Controllers
 {
-    /// <summary>
-    /// 首頁
-    /// </summary>
     public class HomeController : Controller
     {
-        /// <summary>
-        /// 首頁
-        /// </summary>
-        /// <returns></returns>
+        // GET: Home
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            return View();
+        }
 
-            return Redirect("index.html");
+        // GET: Login
+        public ActionResult Login()
+        {
+            return View();
         }
     }
 }

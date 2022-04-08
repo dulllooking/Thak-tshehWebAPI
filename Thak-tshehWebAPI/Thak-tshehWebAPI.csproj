@@ -316,7 +316,10 @@
     <Compile Include="Models\ActivityCollect.cs" />
     <Compile Include="Models\ActivityLog.cs" />
     <Compile Include="Models\ActivityOpinion.cs" />
+    <Compile Include="Models\AdminUser.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\Vms\ActivityCancelVm.cs" />
+    <Compile Include="Models\Vms\ActivityOpinionVm.cs" />
     <Compile Include="Models\Vms\NotMeFollowingJwtVm.cs" />
     <Compile Include="Models\Attributes\ApiMessageJwtResult.cs" />
     <Compile Include="Models\Attributes\ApiMessageResult.cs" />
@@ -867,7 +870,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\CompanyInfoesSet\Create.cshtml" />
@@ -910,6 +912,7 @@
     <Content Include="Views\UsersSet\Details.cshtml" />
     <Content Include="Views\UsersSet\Edit.cshtml" />
     <Content Include="Views\UsersSet\Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

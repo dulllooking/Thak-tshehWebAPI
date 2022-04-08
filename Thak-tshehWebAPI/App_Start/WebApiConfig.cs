@@ -9,6 +9,9 @@ namespace Thak_tshehWebAPI
             // 啟用跨網域存取
             //config.EnableCors();
 
+            // 針對 JSON 資料使用 camel 案例。
+            //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
             // Web API 路由
             config.MapHttpAttributeRoutes();
 
@@ -18,9 +21,10 @@ namespace Thak_tshehWebAPI
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            // 回傳 Json 一律改小寫 (無效)
-            //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            //config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
+            //預設回傳JSON格式
+            //Ref http://huan-lin.blogspot.com/2013/01/aspnet-web-api-and-json.html
+            //var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
+            //config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
         }
     }
 }
