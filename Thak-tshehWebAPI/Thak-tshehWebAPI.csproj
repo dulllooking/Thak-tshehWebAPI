@@ -912,7 +912,6 @@
     <Content Include="Views\UsersSet\Details.cshtml" />
     <Content Include="Views\UsersSet\Edit.cshtml" />
     <Content Include="Views\UsersSet\Index.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1734,12 +1734,15 @@ namespace Thak_tshehWebAPI.Controllers
                 // 查詢指定活動
                 var activityQuery = db.Activity.FirstOrDefault(x => x.Id == logData.ActivityId);
                 // 查詢活動報名記錄
-                var logQuery = db.ActivityLog.Where(x => x.ActivityId == logData.ActivityId);
+                var logQuery = db.ActivityLog.Where(x => x.ActivityId == logData.ActivityId && x.UserId == userId && x.OrderState == true).FirstOrDefault();
                 // 會員報名狀態判斷
-                if (logQuery.Count(x => x.UserId == userId) > 0) {
-                    logQuery.FirstOrDefault(x => x.UserId == userId).OrderState = false;
-                    activityQuery.ApplicantNumber += 1;
+                if (logQuery != null) {
+                    logQuery.OrderState = false;
+                    activityQuery.ApplicantNumber -= 1;
                     db.SaveChanges();
+                }
+                else {
+                    return Ok(new ApiMessageJwtResult { Status = true, JwtToken = jwtToken, Message = "未報名此活動" });
                 }
             }
             catch (Exception ex) {
